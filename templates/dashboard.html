@@ -103,6 +103,9 @@
         <a class="nav-link" onclick="show('habit', this)">🔥 Habit Tracker</a>
         <a class="nav-link" onclick="show('chat', this)">💬 AI Chat</a>
         <a class="nav-link" onclick="show('analytics', this)">📊 Analytics</a>
+        <a class="nav-link" onclick="show('performance', this)">🏆 Performance</a>
+        <a class="nav-link" onclick="show('recommend', this)">🗺️ Recommender</a>
+        <a class="nav-link" onclick="show('iot', this)">📡 Smart Gym</a>
     </nav>
     <div style="position:absolute;bottom:24px;left:16px;right:16px">
         <a href="/" style="color:#aaa;font-size:13px;text-decoration:none">← Back to Home</a>
@@ -111,6 +114,7 @@
 
 <div class="main-content">
 
+    <!-- Workout Section -->
     <div id="workout" class="section active">
         <h3>🤸 AI Workout Trainer</h3>
         <div class="card-dark">
@@ -127,6 +131,7 @@
         </div>
     </div>
 
+    <!-- Diet Section -->
     <div id="diet" class="section">
         <h3>🥗 AI Diet Planner</h3>
         <div class="card-dark">
@@ -161,6 +166,7 @@
         </div>
     </div>
 
+    <!-- Habit Section -->
     <div id="habit" class="section">
         <h3>🔥 Habit Tracker</h3>
         <div class="card-dark">
@@ -173,6 +179,7 @@
         </div>
     </div>
 
+    <!-- Chat Section -->
     <div id="chat" class="section">
         <h3>💬 AI Fitness Chat</h3>
         <div class="card-dark">
@@ -193,6 +200,7 @@
         </div>
     </div>
 
+    <!-- Analytics Section -->
     <div id="analytics" class="section">
         <h3>📊 Analytics Dashboard</h3>
         <div class="row">
@@ -219,7 +227,94 @@
         <button class="btn-red mt-3" onclick="getAnalytics()">Load Analytics</button>
     </div>
 
-</div>
+    <!-- Performance Section -->
+    <div id="performance" class="section">
+        <h3>🏆 Pose-to-Performance Analyzer</h3>
+        <div class="card-dark">
+            <p style="color:#aaa;margin-bottom:16px">Enter your workout details to get your Performance Score and weekly report!</p>
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label>Exercise</label>
+                    <select id="perf-exercise" class="form-control">
+                        <option value="squat">Squats</option>
+                        <option value="pushup">Pushups</option>
+                        <option value="plank">Plank</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label>Reps Completed</label>
+                    <input type="number" id="perf-reps" class="form-control" value="15">
+                </div>
+                <div class="col-md-4">
+                    <label>Duration (minutes)</label>
+                    <input type="number" id="perf-duration" class="form-control" value="5">
+                </div>
+            </div>
+            <button class="btn-red mt-4" onclick="getPerformance()">Analyze Performance</button>
+            <div id="performance-result"></div>
+        </div>
+    </div>
+
+    <!-- Recommender Section -->
+    <div id="recommend" class="section">
+        <h3>🗺️ Gym Recommender & Planner</h3>
+        <div class="card-dark">
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label>Your Goal</label>
+                    <select id="rec-goal" class="form-control">
+                        <option value="weight loss">Weight Loss</option>
+                        <option value="muscle gain">Muscle Gain</option>
+                        <option value="maintain">Maintain Fitness</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label>Fitness Level</label>
+                    <select id="rec-level" class="form-control">
+                        <option value="beginner">Beginner</option>
+                        <option value="intermediate">Intermediate</option>
+                        <option value="advanced">Advanced</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label>Days Per Week</label>
+                    <input type="number" id="rec-days" class="form-control" value="3" min="1" max="7">
+                </div>
+            </div>
+            <button class="btn-red mt-4" onclick="getRecommend()">Get My Plan</button>
+            <div id="recommend-result"></div>
+        </div>
+    </div>
+
+    <!-- IoT Smart Gym Section -->
+    <div id="iot" class="section">
+        <h3>📡 Smart Gym Assistant</h3>
+        <div class="card-dark">
+            <p style="color:#aaa;margin-bottom:16px">Simulate IoT sensor data to get AI-powered gym equipment recommendations!</p>
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label>Heart Rate (BPM)</label>
+                    <input type="number" id="iot-hr" class="form-control" value="120">
+                </div>
+                <div class="col-md-4">
+                    <label>Reps Done</label>
+                    <input type="number" id="iot-reps" class="form-control" value="10">
+                </div>
+                <div class="col-md-4">
+                    <label>Fatigue Level</label>
+                    <select id="iot-fatigue" class="form-control">
+                        <option value="low">Low</option>
+                        <option value="medium">Medium</option>
+                        <option value="high">High</option>
+                    </select>
+                </div>
+            </div>
+            <button class="btn-red mt-4" onclick="getIoT()">Get AI Recommendation</button>
+            <div id="iot-result"></div>
+        </div>
+    </div>
+
+</div><!-- end main-content -->
 
 <script>
 let chatHistory = [];
@@ -350,68 +445,4 @@ function sendChat() {
         '</span></div>';
     box.scrollTop = box.scrollHeight;
     fetch('/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: msg, history: chatHistory.slice(-10) })
-    })
-    .then(function(res) { return res.json(); })
-    .then(function(data) {
-        var t = document.getElementById('typing');
-        if (t) t.remove();
-        box.innerHTML += '<div class="msg-bot"><span>🤖 ' + data.reply + '</span></div>';
-        chatHistory.push({ role: "assistant", content: data.reply });
-        box.scrollTop = box.scrollHeight;
-    })
-    .catch(function() {
-        var t = document.getElementById('typing');
-        if (t) t.remove();
-        box.innerHTML += '<div class="msg-bot"><span style="color:#e94560">❌ Error! Try again.</span></div>';
-    });
-}
-
-function getAnalytics() {
-    var btn = event.target;
-    btn.textContent = 'Loading...';
-    btn.disabled = true;
-    fetch('/analytics')
-    .then(function(res) { return res.json(); })
-    .then(function(data) {
-        var d = data.data;
-        document.getElementById('total-users').textContent = d.total_users;
-        document.getElementById('active-today').textContent = d.active_today;
-        document.getElementById('avg-streak').textContent = d.avg_streak;
-        document.getElementById('top-exercise').textContent = d.top_exercise;
-        if (chartInstance) chartInstance.destroy();
-        chartInstance = new Chart(document.getElementById('weeklyChart'), {
-            type: 'bar',
-            data: {
-                labels: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],
-                datasets: [{
-                    label: 'Workouts This Week',
-                    data: d.weekly_workouts,
-                    backgroundColor: '#e94560cc',
-                    borderColor: '#e94560',
-                    borderWidth: 1,
-                    borderRadius: 8
-                }]
-            },
-            options: {
-                plugins: { legend: { labels: { color: 'white' }}},
-                scales: {
-                    x: { ticks: { color: '#aaa' }, grid: { color: '#ffffff0d' }},
-                    y: { ticks: { color: '#aaa' }, grid: { color: '#ffffff0d' }}
-                }
-            }
-        });
-        btn.textContent = 'Load Analytics';
-        btn.disabled = false;
-    })
-    .catch(function() {
-        alert('Error loading analytics!');
-        btn.textContent = 'Load Analytics';
-        btn.disabled = false;
-    });
-}
-</script>
-</body>
-</html>
+        method: 'POST'

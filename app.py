@@ -112,6 +112,134 @@ def analytics():
             "weekly_workouts": [3, 5, 4, 6, 5, 7, 4]
         }
     })
+@app.route('/performance', methods=['POST'])
+def performance():
+    data = request.get_json()
+    reps = data.get('reps', 0)
+    duration = data.get('duration', 0)
+    exercise = data.get('exercise', 'squat')
+
+    if reps == 0:
+        score = 0
+    elif duration == 0:
+        score = 50
+    else:
+        reps_per_min = (reps / duration) * 60
+        if reps_per_min >= 20:
+            score = 95
+        elif reps_per_min >= 15:
+            score = 85
+        elif reps_per_min >= 10:
+            score = 70
+        elif reps_per_min >= 5:
+            score = 55
+        else:
+            score = 40
+
+    if score >= 90:
+        grade = "Excellent 🏆"
+    elif score >= 75:
+        grade = "Good 💪"
+    elif score >= 60:
+        grade = "Average 👍"
+    else:
+        grade = "Need Improvement 📈"
+
+    return jsonify({
+        "status": "success",
+        "data": {
+            "exercise": exercise,
+            "reps": reps,
+            "performance_score": score,
+            "grade": grade,
+            "weekly_report": {
+                "Mon": 72, "Tue": 78, "Wed": 65,
+                "Thu": 80, "Fri": 85, "Sat": 90, "Sun": score
+            }
+        }
+    })
+@app.route('/recommend', methods=['POST'])
+def recommend():
+    data = request.get_json()
+    goal = data.get('goal', 'weight loss')
+    level = data.get('level', 'beginner')
+    days = data.get('days', 3)
+
+    plans = {
+        'weight loss': {
+            'beginner': ['30 min walking', 'Basic cardio', 'Light stretching'],
+            'intermediate': ['HIIT 20 min', 'Jump rope', 'Cycling 30 min'],
+            'advanced': ['Running 5km', 'Burpees', 'Circuit training']
+        },
+        'muscle gain': {
+            'beginner': ['Bodyweight squats', 'Pushups', 'Dumbbell curls'],
+            'intermediate': ['Bench press', 'Deadlift', 'Pull ups'],
+            'advanced': ['Heavy compound lifts', 'Progressive overload', 'Supersets']
+        },
+        'maintain': {
+            'beginner': ['Yoga', 'Walking', 'Light stretching'],
+            'intermediate': ['Mixed cardio', 'Bodyweight training', 'Swimming'],
+            'advanced': ['CrossFit', 'Sport specific training', 'Functional fitness']
+        }
+    }
+
+    nearby_gyms = [
+        {"name": "FitLife Gym", "distance": "0.5 km", "rating": "4.5"},
+        {"name": "PowerZone Fitness", "distance": "1.2 km", "rating": "4.3"},
+        {"name": "HealthFirst Club", "distance": "2.0 km", "rating": "4.7"}
+    ]
+
+    workout_plan = plans.get(goal, plans['maintain']).get(level, ['Basic workout'])
+
+    return jsonify({
+        "status": "success",
+        "data": {
+            "goal": goal,
+            "level": level,
+            "days_per_week": days,
+            "recommended_exercises": workout_plan,
+            "nearby_gyms": nearby_gyms,
+            "challenge": f"Complete {days} workouts this week — you got this! 💪"
+        }
+    })
+@app.route('/iot', methods=['POST'])
+def iot():
+    data = request.get_json()
+    heart_rate = data.get('heart_rate', 75)
+    reps = data.get('reps', 0)
+    fatigue = data.get('fatigue', 'low')
+
+    if heart_rate > 150:
+        resistance = "Decrease resistance by 20%"
+        rest = "Take 2 minute rest now!"
+        intensity = "High"
+    elif heart_rate > 120:
+        resistance = "Maintain current resistance"
+        rest = "Rest after 2 more sets"
+        intensity = "Medium"
+    else:
+        resistance = "Increase resistance by 10%"
+        rest = "Keep going — you are doing great!"
+        intensity = "Low"
+
+    if fatigue == 'high':
+        recommendation = "Stop workout — rest for today!"
+    elif fatigue == 'medium':
+        recommendation = "Slow down and focus on form"
+    else:
+        recommendation = "Great energy — push harder!"
+
+    return jsonify({
+        "status": "success",
+        "data": {
+            "heart_rate": heart_rate,
+            "intensity_level": intensity,
+            "resistance_adjustment": resistance,
+            "rest_recommendation": rest,
+            "ai_recommendation": recommendation,
+            "calories_burned": round(heart_rate * 0.15 * (reps or 10), 1)
+        }
+    })
 
 if __name__ == '__main__':
     app.run(debug=True)

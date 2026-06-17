@@ -114,7 +114,6 @@
 
 <div class="main-content">
 
-    <!-- Workout Section -->
     <div id="workout" class="section active">
         <h3>🤸 AI Workout Trainer</h3>
         <div class="card-dark">
@@ -124,16 +123,15 @@
         </div>
         <div class="card-dark">
             <h5 style="margin-bottom:16px">💡 Quick Tips</h5>
-            <p style="color:#aaa;font-size:14px">✅ Stand 1.5–2 metres from camera for best pose detection</p>
+            <p style="color:#aaa;font-size:14px">✅ Stand 1.5-2 metres from camera for best pose detection</p>
             <p style="color:#aaa;font-size:14px">✅ Make sure your full body is visible in the frame</p>
             <p style="color:#aaa;font-size:14px">✅ Good lighting helps the AI detect your joints better</p>
             <p style="color:#aaa;font-size:14px">✅ Press Q to quit the webcam window</p>
         </div>
     </div>
 
-    <!-- Diet Section -->
     <div id="diet" class="section">
-        <h3>🥗 AI Diet Planner</h3>
+        <h3>🥗 AI Dietician & Calorie Coach</h3>
         <div class="card-dark">
             <div class="row g-3">
                 <div class="col-md-3">
@@ -166,9 +164,8 @@
         </div>
     </div>
 
-    <!-- Habit Section -->
     <div id="habit" class="section">
-        <h3>🔥 Habit Tracker</h3>
+        <h3>🔥 AI Fitness Habit Tracker</h3>
         <div class="card-dark">
             <p style="color:#aaa;margin-bottom:16px">Enter your recent workout dates and AI will predict your skip risk and current streak.</p>
             <label>Your Workout Dates (comma separated)</label>
@@ -179,9 +176,8 @@
         </div>
     </div>
 
-    <!-- Chat Section -->
     <div id="chat" class="section">
-        <h3>💬 AI Fitness Chat</h3>
+        <h3>💬 Virtual Gym Buddy</h3>
         <div class="card-dark">
             <div id="chat-box">
                 <div class="msg-bot">
@@ -200,7 +196,6 @@
         </div>
     </div>
 
-    <!-- Analytics Section -->
     <div id="analytics" class="section">
         <h3>📊 Analytics Dashboard</h3>
         <div class="row">
@@ -227,7 +222,6 @@
         <button class="btn-red mt-3" onclick="getAnalytics()">Load Analytics</button>
     </div>
 
-    <!-- Performance Section -->
     <div id="performance" class="section">
         <h3>🏆 Pose-to-Performance Analyzer</h3>
         <div class="card-dark">
@@ -255,7 +249,6 @@
         </div>
     </div>
 
-    <!-- Recommender Section -->
     <div id="recommend" class="section">
         <h3>🗺️ Gym Recommender & Planner</h3>
         <div class="card-dark">
@@ -286,9 +279,8 @@
         </div>
     </div>
 
-    <!-- IoT Smart Gym Section -->
     <div id="iot" class="section">
-        <h3>📡 Smart Gym Assistant</h3>
+        <h3>📡 Smart Gym Assistant (IoT)</h3>
         <div class="card-dark">
             <p style="color:#aaa;margin-bottom:16px">Simulate IoT sensor data to get AI-powered gym equipment recommendations!</p>
             <div class="row g-3">
@@ -314,119 +306,63 @@
         </div>
     </div>
 
-</div><!-- end main-content -->
+</div>
 
 <script>
-let chatHistory = [];
-let chartInstance = null;
+var chatHistory = [];
+var chartInstance = null;
 
 function show(section, el) {
-    document.querySelectorAll('.section').forEach(function(s) {
-        s.classList.remove('active');
-    });
-    document.querySelectorAll('.nav-link').forEach(function(l) {
-        l.classList.remove('active');
-    });
+    document.querySelectorAll('.section').forEach(function(s) { s.classList.remove('active'); });
+    document.querySelectorAll('.nav-link').forEach(function(l) { l.classList.remove('active'); });
     document.getElementById(section).classList.add('active');
     el.classList.add('active');
 }
 
 function getWorkout() {
-    var btn = event.target;
-    btn.textContent = 'Loading...';
-    btn.disabled = true;
+    var btn = event.target; btn.textContent = 'Loading...'; btn.disabled = true;
     fetch('/workout')
     .then(function(res) { return res.json(); })
     .then(function(data) {
-        var badges = data.exercises.map(function(e) {
-            return '<span class="exercise-badge">' + e + '</span>';
-        }).join('');
-        document.getElementById('workout-result').innerHTML =
-            '<div class="result-box">' +
-            '<p>✅ <strong>' + data.message + '</strong></p>' +
-            '<p style="color:#aaa;margin-top:8px">💡 Tip: ' + data.tip + '</p>' +
-            '<div style="margin-top:12px">' + badges + '</div>' +
-            '</div>';
-        btn.textContent = "Load Today's Plan";
-        btn.disabled = false;
-    })
-    .catch(function() {
-        document.getElementById('workout-result').innerHTML =
-            '<p style="color:#e94560;margin-top:12px">❌ Error loading workout plan</p>';
-        btn.textContent = "Load Today's Plan";
-        btn.disabled = false;
-    });
+        var badges = data.exercises.map(function(e) { return '<span class="exercise-badge">' + e + '</span>'; }).join('');
+        document.getElementById('workout-result').innerHTML = '<div class="result-box"><p>✅ <strong>' + data.message + '</strong></p><p style="color:#aaa;margin-top:8px">💡 ' + data.tip + '</p><div style="margin-top:12px">' + badges + '</div></div>';
+        btn.textContent = "Load Today's Plan"; btn.disabled = false;
+    }).catch(function() { btn.textContent = "Load Today's Plan"; btn.disabled = false; });
 }
 
 function getDiet() {
-    var btn = event.target;
-    btn.textContent = 'Generating...';
-    btn.disabled = true;
-    var payload = {
-        weight: +document.getElementById('weight').value,
-        height: +document.getElementById('height').value,
-        goal: document.getElementById('goal').value,
-        preference: document.getElementById('preference').value
-    };
+    var btn = event.target; btn.textContent = 'Generating...'; btn.disabled = true;
     fetch('/diet', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            weight: +document.getElementById('weight').value,
+            height: +document.getElementById('height').value,
+            goal: document.getElementById('goal').value,
+            preference: document.getElementById('preference').value
+        })
     })
     .then(function(res) { return res.json(); })
     .then(function(data) {
         var d = data.data;
-        var bmiColor = d.category === 'Normal' ? '#00ff88' :
-                       d.category === 'Underweight' ? '#ffcc00' : '#e94560';
-        document.getElementById('diet-result').innerHTML =
-            '<div class="result-box">' +
-            '<p>📊 BMI: <strong style="color:' + bmiColor + ';font-size:1.2rem">' + d.bmi + '</strong>' +
-            ' — <span style="color:' + bmiColor + '">' + d.category + '</span></p>' +
-            '<p>🔥 Daily Calories: <strong style="color:#e94560">' + d.daily_calories + ' kcal</strong></p>' +
-            '<p>🥗 Meal Plan: <span style="color:#ddd">' + d.meal_plan + '</span></p>' +
-            '<p>🎯 Goal: <span style="color:#aaa">' + d.goal + '</span></p>' +
-            '</div>';
-        btn.textContent = 'Generate My Diet Plan';
-        btn.disabled = false;
-    })
-    .catch(function() {
-        document.getElementById('diet-result').innerHTML =
-            '<p style="color:#e94560;margin-top:12px">❌ Error generating diet plan</p>';
-        btn.textContent = 'Generate My Diet Plan';
-        btn.disabled = false;
-    });
+        var bmiColor = d.category === 'Normal' ? '#00ff88' : d.category === 'Underweight' ? '#ffcc00' : '#e94560';
+        document.getElementById('diet-result').innerHTML = '<div class="result-box"><p>📊 BMI: <strong style="color:' + bmiColor + ';font-size:1.2rem">' + d.bmi + '</strong> — <span style="color:' + bmiColor + '">' + d.category + '</span></p><p>🔥 Calories: <strong style="color:#e94560">' + d.daily_calories + ' kcal</strong></p><p>🥗 ' + d.meal_plan + '</p><p>🎯 Goal: ' + d.goal + '</p></div>';
+        btn.textContent = 'Generate My Diet Plan'; btn.disabled = false;
+    }).catch(function() { btn.textContent = 'Generate My Diet Plan'; btn.disabled = false; });
 }
 
 function getHabit() {
-    var btn = event.target;
-    btn.textContent = 'Analyzing...';
-    btn.disabled = true;
-    var raw = document.getElementById('workout-log').value;
-    var log = raw.split(',').map(function(d) { return d.trim(); }).filter(function(d) { return d; });
+    var btn = event.target; btn.textContent = 'Analyzing...'; btn.disabled = true;
+    var log = document.getElementById('workout-log').value.split(',').map(function(d) { return d.trim(); }).filter(function(d) { return d; });
     fetch('/habit', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ workout_log: log })
     })
     .then(function(res) { return res.json(); })
     .then(function(data) {
-        var riskClass = data.prediction.risk === 'Low' ? 'badge-low' :
-                        data.prediction.risk === 'Medium' ? 'badge-medium' : 'badge-high';
-        document.getElementById('habit-result').innerHTML =
-            '<div class="result-box">' +
-            '<p>🔥 Current Streak: <strong style="color:#e94560;font-size:1.2rem">' + data.streak + ' days</strong></p>' +
-            '<p>⚠️ Skip Risk: <span class="' + riskClass + '">' + data.prediction.risk + '</span></p>' +
-            '<p>💬 <span style="color:#ddd">' + data.prediction.message + '</span></p>' +
-            '</div>';
-        btn.textContent = 'Analyze My Habit';
-        btn.disabled = false;
-    })
-    .catch(function() {
-        document.getElementById('habit-result').innerHTML =
-            '<p style="color:#e94560;margin-top:12px">❌ Error analyzing habit</p>';
-        btn.textContent = 'Analyze My Habit';
-        btn.disabled = false;
-    });
+        var riskClass = data.prediction.risk === 'Low' ? 'badge-low' : data.prediction.risk === 'Medium' ? 'badge-medium' : 'badge-high';
+        document.getElementById('habit-result').innerHTML = '<div class="result-box"><p>🔥 Streak: <strong style="color:#e94560;font-size:1.2rem">' + data.streak + ' days</strong></p><p>⚠️ Risk: <span class="' + riskClass + '">' + data.prediction.risk + '</span></p><p>💬 <span style="color:#ddd">' + data.prediction.message + '</span></p></div>';
+        btn.textContent = 'Analyze My Habit'; btn.disabled = false;
+    }).catch(function() { btn.textContent = 'Analyze My Habit'; btn.disabled = false; });
 }
 
 function sendChat() {
@@ -436,13 +372,105 @@ function sendChat() {
     var box = document.getElementById('chat-box');
     box.innerHTML += '<div class="msg-user"><span>' + msg + '</span></div>';
     input.value = '';
-    box.scrollTop = box.scrollHeight;
     chatHistory.push({ role: "user", content: msg });
-    box.innerHTML += '<div id="typing" class="msg-bot"><span>' +
-        '<span class="typing-dot"></span>' +
-        '<span class="typing-dot"></span>' +
-        '<span class="typing-dot"></span>' +
-        '</span></div>';
+    box.innerHTML += '<div id="typing" class="msg-bot"><span><span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span></span></div>';
     box.scrollTop = box.scrollHeight;
     fetch('/chat', {
-        method: 'POST'
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: msg, history: chatHistory.slice(-10) })
+    })
+    .then(function(res) { return res.json(); })
+    .then(function(data) {
+        var t = document.getElementById('typing'); if (t) t.remove();
+        box.innerHTML += '<div class="msg-bot"><span>🤖 ' + data.reply + '</span></div>';
+        chatHistory.push({ role: "assistant", content: data.reply });
+        box.scrollTop = box.scrollHeight;
+    }).catch(function() {
+        var t = document.getElementById('typing'); if (t) t.remove();
+        box.innerHTML += '<div class="msg-bot"><span style="color:#e94560">❌ Error! Try again.</span></div>';
+    });
+}
+
+function getAnalytics() {
+    var btn = event.target; btn.textContent = 'Loading...'; btn.disabled = true;
+    fetch('/analytics')
+    .then(function(res) { return res.json(); })
+    .then(function(data) {
+        var d = data.data;
+        document.getElementById('total-users').textContent = d.total_users;
+        document.getElementById('active-today').textContent = d.active_today;
+        document.getElementById('avg-streak').textContent = d.avg_streak;
+        document.getElementById('top-exercise').textContent = d.top_exercise;
+        if (chartInstance) chartInstance.destroy();
+        chartInstance = new Chart(document.getElementById('weeklyChart'), {
+            type: 'bar',
+            data: { labels: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'], datasets: [{ label: 'Workouts', data: d.weekly_workouts, backgroundColor: '#e94560cc', borderColor: '#e94560', borderWidth: 1, borderRadius: 8 }] },
+            options: { plugins: { legend: { labels: { color: 'white' }}}, scales: { x: { ticks: { color: '#aaa' }, grid: { color: '#ffffff0d' }}, y: { ticks: { color: '#aaa' }, grid: { color: '#ffffff0d' }}}}
+        });
+        btn.textContent = 'Load Analytics'; btn.disabled = false;
+    }).catch(function() { btn.textContent = 'Load Analytics'; btn.disabled = false; });
+}
+
+function getPerformance() {
+    var btn = event.target; btn.textContent = 'Analyzing...'; btn.disabled = true;
+    fetch('/performance', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            exercise: document.getElementById('perf-exercise').value,
+            reps: +document.getElementById('perf-reps').value,
+            duration: +document.getElementById('perf-duration').value
+        })
+    })
+    .then(function(res) { return res.json(); })
+    .then(function(data) {
+        var d = data.data;
+        var scoreColor = d.performance_score >= 80 ? '#00ff88' : d.performance_score >= 60 ? '#ffcc00' : '#e94560';
+        var bars = Object.entries(d.weekly_report).map(function(e) {
+            return '<div style="display:inline-block;margin:4px;text-align:center"><div style="background:#e94560;width:30px;height:' + e[1] + 'px;border-radius:4px 4px 0 0;margin:0 auto"></div><div style="color:#aaa;font-size:11px">' + e[0] + '</div></div>';
+        }).join('');
+        document.getElementById('performance-result').innerHTML = '<div class="result-box"><p>🏋️ Exercise: <strong>' + d.exercise + '</strong></p><p>🎯 Score: <strong style="color:' + scoreColor + ';font-size:1.5rem">' + d.performance_score + '/100</strong></p><p>🏆 Grade: <strong style="color:' + scoreColor + '">' + d.grade + '</strong></p><p style="margin-top:12px">📊 Weekly:</p><div style="display:flex;align-items:flex-end;margin-top:8px">' + bars + '</div></div>';
+        btn.textContent = 'Analyze Performance'; btn.disabled = false;
+    }).catch(function() { btn.textContent = 'Analyze Performance'; btn.disabled = false; });
+}
+
+function getRecommend() {
+    var btn = event.target; btn.textContent = 'Loading...'; btn.disabled = true;
+    fetch('/recommend', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            goal: document.getElementById('rec-goal').value,
+            level: document.getElementById('rec-level').value,
+            days: +document.getElementById('rec-days').value
+        })
+    })
+    .then(function(res) { return res.json(); })
+    .then(function(data) {
+        var d = data.data;
+        var exercises = d.recommended_exercises.map(function(e) { return '<span class="exercise-badge">' + e + '</span>'; }).join('');
+        var gyms = d.nearby_gyms.map(function(g) { return '<p>📍 <strong>' + g.name + '</strong> — ' + g.distance + ' ⭐ ' + g.rating + '</p>'; }).join('');
+        document.getElementById('recommend-result').innerHTML = '<div class="result-box"><p>🎯 Goal: <strong>' + d.goal + '</strong> | Level: <strong>' + d.level + '</strong></p><div style="margin:8px 0">' + exercises + '</div><p style="margin-top:12px">🏋️ Nearby Gyms:</p>' + gyms + '<p style="margin-top:8px;color:#e94560">🔥 ' + d.challenge + '</p></div>';
+        btn.textContent = 'Get My Plan'; btn.disabled = false;
+    }).catch(function() { btn.textContent = 'Get My Plan'; btn.disabled = false; });
+}
+
+function getIoT() {
+    var btn = event.target; btn.textContent = 'Analyzing...'; btn.disabled = true;
+    fetch('/iot', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            heart_rate: +document.getElementById('iot-hr').value,
+            reps: +document.getElementById('iot-reps').value,
+            fatigue: document.getElementById('iot-fatigue').value
+        })
+    })
+    .then(function(res) { return res.json(); })
+    .then(function(data) {
+        var d = data.data;
+        var hrColor = d.heart_rate > 150 ? '#e94560' : d.heart_rate > 120 ? '#ffcc00' : '#00ff88';
+        document.getElementById('iot-result').innerHTML = '<div class="result-box"><p>❤️ Heart Rate: <strong style="color:' + hrColor + '">' + d.heart_rate + ' BPM</strong></p><p>⚡ Intensity: <strong>' + d.intensity_level + '</strong></p><p>🔧 ' + d.resistance_adjustment + '</p><p>⏱️ ' + d.rest_recommendation + '</p><p>🤖 <strong style="color:#e94560">' + d.ai_recommendation + '</strong></p><p>🔥 Calories: <strong>' + d.calories_burned + ' kcal</strong></p></div>';
+        btn.textContent = 'Get AI Recommendation'; btn.disabled = false;
+    }).catch(function() { btn.textContent = 'Get AI Recommendation'; btn.disabled = false; });
+}
+</script>
+</body>
+</html>

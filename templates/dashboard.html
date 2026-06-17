@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - AI Gym Assistant</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #0f0f0f; color: white; font-family: 'Segoe UI', sans-serif; }
+        .sidebar {
+            background: #1a1a2e; min-height: 100vh; padding: 24px 16px;
+            position: fixed; width: 220px; left: 0; top: 0;
+            border-right: 1px solid #ffffff11;
+        }
+        .main-content { margin-left: 220px; padding: 32px; min-height: 100vh; }
+        .nav-link {
+            color: #aaa; border-radius: 8px; margin: 4px 0;
+            padding: 10px 14px; cursor: pointer; display: block;
+            text-decoration: none; transition: all 0.2s;
+        }
+        .nav-link:hover { background: #ffffff11; color: white; }
+        .nav-link.active { background: #e94560; color: white; }
+        .card-dark {
+            background: #1a1a2e; border: 1px solid #ffffff11;
+            border-radius: 16px; padding: 24px; margin-bottom: 20px;
+        }
+        .section { display: none; }
+        .section.active { display: block; }
+        input, select {
+            background: #0f0f0f !important; color: white !important;
+            border: 1px solid #ffffff22 !important; border-radius: 8px !important;
+        }
+        input::placeholder { color: #666 !important; }
+        .btn-red {
+            background: #e94560; border: none; color: white;
+            border-radius: 8px; padding: 10px 24px;
+            cursor: pointer; transition: all 0.2s;
+        }
+        .btn-red:hover { background: #c73652; color: white; transform: scale(1.02); }
+        #chat-box {
+            height: 380px; overflow-y: auto; background: #0a0a0a;
+            border-radius: 12px; padding: 16px; border: 1px solid #ffffff11;
+        }
+        #chat-box::-webkit-scrollbar { width: 4px; }
+        #chat-box::-webkit-scrollbar-thumb { background: #e94560; border-radius: 4px; }
+        .msg-user { text-align: right; margin: 10px 0; }
+        .msg-user span {
+            background: #e94560; padding: 10px 16px;
+            border-radius: 18px 18px 4px 18px;
+            display: inline-block; max-width: 75%; font-size: 14px;
+        }
+        .msg-bot { text-align: left; margin: 10px 0; }
+        .msg-bot span {
+            background: #1a1a2e; padding: 10px 16px;
+            border-radius: 18px 18px 18px 4px; display: inline-block;
+            max-width: 75%; color: #ddd; font-size: 14px;
+            border: 1px solid #ffffff11; line-height: 1.5;
+        }
+        .stat-card {
+            background: #1a1a2e; border: 1px solid #e9456033;
+            border-radius: 16px; padding: 20px;
+            text-align: center; margin-bottom: 16px;
+        }
+        .stat-card h2 { color: #e94560; font-size: 2rem; font-weight: 700; }
+        .stat-card p { color: #aaa; margin: 0; font-size: 14px; }
+        .result-box {
+            background: #0a0a0a; border: 1px solid #ffffff11;
+            border-radius: 12px; padding: 20px; margin-top: 16px;
+        }
+        .result-box p { margin: 8px 0; font-size: 15px; }
+        .badge-low { color: #00ff88; font-weight: 600; }
+        .badge-medium { color: #ffcc00; font-weight: 600; }
+        .badge-high { color: #e94560; font-weight: 600; }
+        .typing-dot {
+            display: inline-block; width: 6px; height: 6px;
+            background: #aaa; border-radius: 50%; margin: 0 2px;
+            animation: bounce 1s infinite;
+        }
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes bounce {
+            0%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-6px); }
+        }
+        .exercise-badge {
+            background: #e9456022; border: 1px solid #e9456055;
+            color: #e94560; padding: 6px 14px; border-radius: 20px;
+            display: inline-block; margin: 4px; font-size: 14px;
+        }
+        h3 { font-size: 1.6rem; font-weight: 600; margin-bottom: 20px; }
+        label { color: #aaa; font-size: 13px; margin-bottom: 4px; display: block; }
+    </style>
+</head>
+<body>
+
+<div class="sidebar">
+    <h5 class="text-center mb-4" style="color:#e94560;font-weight:700">🏋️ AI Gym</h5>
+    <nav>
+        <a class="nav-link active" onclick="show('workout', this)">🤸 Workout</a>
+        <a class="nav-link" onclick="show('diet', this)">🥗 Diet Planner</a>
+        <a class="nav-link" onclick="show('habit', this)">🔥 Habit Tracker</a>
+        <a class="nav-link" onclick="show('chat', this)">💬 AI Chat</a>
+        <a class="nav-link" onclick="show('analytics', this)">📊 Analytics</a>
+    </nav>
+    <div style="position:absolute;bottom:24px;left:16px;right:16px">
+        <a href="/" style="color:#aaa;font-size:13px;text-decoration:none">← Back to Home</a>
+    </div>
+</div>
+
+<div class="main-content">
+
+    <div id="workout" class="section active">
+        <h3>🤸 AI Workout Trainer</h3>
+        <div class="card-dark">
+            <p style="color:#aaa;margin-bottom:16px">Your AI trainer analyzes your pose in real time using webcam, counts reps and corrects your form automatically.</p>
+            <button class="btn-red" onclick="getWorkout()">Load Today's Plan</button>
+            <div id="workout-result" class="mt-4"></div>
+        </div>
+        <div class="card-dark">
+            <h5 style="margin-bottom:16px">💡 Quick Tips</h5>
+            <p style="color:#aaa;font-size:14px">✅ Stand 1.5–2 metres from camera for best pose detection</p>
+            <p style="color:#aaa;font-size:14px">✅ Make sure your full body is visible in the frame</p>
+            <p style="color:#aaa;font-size:14px">✅ Good lighting helps the AI detect your joints better</p>
+            <p style="color:#aaa;font-size:14px">✅ Press Q to quit the webcam window</p>
+        </div>
+    </div>
+
+    <div id="diet" class="section">
+        <h3>🥗 AI Diet Planner</h3>
+        <div class="card-dark">
+            <div class="row g-3">
+                <div class="col-md-3">
+                    <label>Weight (kg)</label>
+                    <input type="number" id="weight" class="form-control" value="70">
+                </div>
+                <div class="col-md-3">
+                    <label>Height (cm)</label>
+                    <input type="number" id="height" class="form-control" value="165">
+                </div>
+                <div class="col-md-3">
+                    <label>Goal</label>
+                    <select id="goal" class="form-control">
+                        <option value="weight loss">Weight Loss</option>
+                        <option value="maintain">Maintain Weight</option>
+                        <option value="muscle gain">Muscle Gain</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label>Food Preference</label>
+                    <select id="preference" class="form-control">
+                        <option value="vegetarian">Vegetarian</option>
+                        <option value="non-vegetarian">Non-Vegetarian</option>
+                        <option value="vegan">Vegan</option>
+                    </select>
+                </div>
+            </div>
+            <button class="btn-red mt-4" onclick="getDiet()">Generate My Diet Plan</button>
+            <div id="diet-result"></div>
+        </div>
+    </div>
+
+    <div id="habit" class="section">
+        <h3>🔥 Habit Tracker</h3>
+        <div class="card-dark">
+            <p style="color:#aaa;margin-bottom:16px">Enter your recent workout dates and AI will predict your skip risk and current streak.</p>
+            <label>Your Workout Dates (comma separated)</label>
+            <input type="text" id="workout-log" class="form-control mb-3"
+                   placeholder="e.g. 2026-06-10, 2026-06-11, 2026-06-12">
+            <button class="btn-red" onclick="getHabit()">Analyze My Habit</button>
+            <div id="habit-result"></div>
+        </div>
+    </div>
+
+    <div id="chat" class="section">
+        <h3>💬 AI Fitness Chat</h3>
+        <div class="card-dark">
+            <div id="chat-box">
+                <div class="msg-bot">
+                    <span>👋 Hey! I am your AI Fitness Assistant. Ask me anything about diet, workouts, protein, calories or motivation! 💪</span>
+                </div>
+            </div>
+            <div class="d-flex gap-2 mt-3">
+                <input type="text" id="chat-input" class="form-control"
+                       placeholder="Ask me about diet, workout, motivation..."
+                       onkeypress="if(event.key==='Enter') sendChat()">
+                <button class="btn-red" onclick="sendChat()">Send</button>
+            </div>
+            <div class="mt-2" style="color:#555;font-size:12px">
+                💡 Try: "what are protein rich foods" or "I feel lazy today" or "how to lose weight"
+            </div>
+        </div>
+    </div>
+
+    <div id="analytics" class="section">
+        <h3>📊 Analytics Dashboard</h3>
+        <div class="row">
+            <div class="col-md-3">
+                <div class="stat-card"><h2 id="total-users">-</h2><p>Total Users</p></div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card"><h2 id="active-today">-</h2><p>Active Today</p></div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card"><h2 id="avg-streak">-</h2><p>Avg Streak (days)</p></div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card">
+                    <h2 id="top-exercise" style="font-size:1.2rem;padding-top:8px">-</h2>
+                    <p>Top Exercise</p>
+                </div>
+            </div>
+        </div>
+        <div class="card-dark">
+            <h5 style="margin-bottom:20px">Weekly Workout Activity</h5>
+            <canvas id="weeklyChart" height="100"></canvas>
+        </div>
+        <button class="btn-red mt-3" onclick="getAnalytics()">Load Analytics</button>
+    </div>
+
+</div>
+
+<script>
+let chatHistory = [];
+let chartInstance = null;
+
+function show(section, el) {
+    document.querySelectorAll('.section').forEach(function(s) {
+        s.classList.remove('active');
+    });
+    document.querySelectorAll('.nav-link').forEach(function(l) {
+        l.classList.remove('active');
+    });
+    document.getElementById(section).classList.add('active');
+    el.classList.add('active');
+}
+
+function getWorkout() {
+    var btn = event.target;
+    btn.textContent = 'Loading...';
+    btn.disabled = true;
+    fetch('/workout')
+    .then(function(res) { return res.json(); })
+    .then(function(data) {
+        var badges = data.exercises.map(function(e) {
+            return '<span class="exercise-badge">' + e + '</span>';
+        }).join('');
+        document.getElementById('workout-result').innerHTML =
+            '<div class="result-box">' +
+            '<p>✅ <strong>' + data.message + '</strong></p>' +
+            '<p style="color:#aaa;margin-top:8px">💡 Tip: ' + data.tip + '</p>' +
+            '<div style="margin-top:12px">' + badges + '</div>' +
+            '</div>';
+        btn.textContent = "Load Today's Plan";
+        btn.disabled = false;
+    })
+    .catch(function() {
+        document.getElementById('workout-result').innerHTML =
+            '<p style="color:#e94560;margin-top:12px">❌ Error loading workout plan</p>';
+        btn.textContent = "Load Today's Plan";
+        btn.disabled = false;
+    });
+}
+
+function getDiet() {
+    var btn = event.target;
+    btn.textContent = 'Generating...';
+    btn.disabled = true;
+    var payload = {
+        weight: +document.getElementById('weight').value,
+        height: +document.getElementById('height').value,
+        goal: document.getElementById('goal').value,
+        preference: document.getElementById('preference').value
+    };
+    fetch('/diet', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+    })
+    .then(function(res) { return res.json(); })
+    .then(function(data) {
+        var d = data.data;
+        var bmiColor = d.category === 'Normal' ? '#00ff88' :
+                       d.category === 'Underweight' ? '#ffcc00' : '#e94560';
+        document.getElementById('diet-result').innerHTML =
+            '<div class="result-box">' +
+            '<p>📊 BMI: <strong style="color:' + bmiColor + ';font-size:1.2rem">' + d.bmi + '</strong>' +
+            ' — <span style="color:' + bmiColor + '">' + d.category + '</span></p>' +
+            '<p>🔥 Daily Calories: <strong style="color:#e94560">' + d.daily_calories + ' kcal</strong></p>' +
+            '<p>🥗 Meal Plan: <span style="color:#ddd">' + d.meal_plan + '</span></p>' +
+            '<p>🎯 Goal: <span style="color:#aaa">' + d.goal + '</span></p>' +
+            '</div>';
+        btn.textContent = 'Generate My Diet Plan';
+        btn.disabled = false;
+    })
+    .catch(function() {
+        document.getElementById('diet-result').innerHTML =
+            '<p style="color:#e94560;margin-top:12px">❌ Error generating diet plan</p>';
+        btn.textContent = 'Generate My Diet Plan';
+        btn.disabled = false;
+    });
+}
+
+function getHabit() {
+    var btn = event.target;
+    btn.textContent = 'Analyzing...';
+    btn.disabled = true;
+    var raw = document.getElementById('workout-log').value;
+    var log = raw.split(',').map(function(d) { return d.trim(); }).filter(function(d) { return d; });
+    fetch('/habit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ workout_log: log })
+    })
+    .then(function(res) { return res.json(); })
+    .then(function(data) {
+        var riskClass = data.prediction.risk === 'Low' ? 'badge-low' :
+                        data.prediction.risk === 'Medium' ? 'badge-medium' : 'badge-high';
+        document.getElementById('habit-result').innerHTML =
+            '<div class="result-box">' +
+            '<p>🔥 Current Streak: <strong style="color:#e94560;font-size:1.2rem">' + data.streak + ' days</strong></p>' +
+            '<p>⚠️ Skip Risk: <span class="' + riskClass + '">' + data.prediction.risk + '</span></p>' +
+            '<p>💬 <span style="color:#ddd">' + data.prediction.message + '</span></p>' +
+            '</div>';
+        btn.textContent = 'Analyze My Habit';
+        btn.disabled = false;
+    })
+    .catch(function() {
+        document.getElementById('habit-result').innerHTML =
+            '<p style="color:#e94560;margin-top:12px">❌ Error analyzing habit</p>';
+        btn.textContent = 'Analyze My Habit';
+        btn.disabled = false;
+    });
+}
+
+function sendChat() {
+    var input = document.getElementById('chat-input');
+    var msg = input.value.trim();
+    if (!msg) return;
+    var box = document.getElementById('chat-box');
+    box.innerHTML += '<div class="msg-user"><span>' + msg + '</span></div>';
+    input.value = '';
+    box.scrollTop = box.scrollHeight;
+    chatHistory.push({ role: "user", content: msg });
+    box.innerHTML += '<div id="typing" class="msg-bot"><span>' +
+        '<span class="typing-dot"></span>' +
+        '<span class="typing-dot"></span>' +
+        '<span class="typing-dot"></span>' +
+        '</span></div>';
+    box.scrollTop = box.scrollHeight;
+    fetch('/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: msg, history: chatHistory.slice(-10) })
+    })
+    .then(function(res) { return res.json(); })
+    .then(function(data) {
+        var t = document.getElementById('typing');
+        if (t) t.remove();
+        box.innerHTML += '<div class="msg-bot"><span>🤖 ' + data.reply + '</span></div>';
+        chatHistory.push({ role: "assistant", content: data.reply });
+        box.scrollTop = box.scrollHeight;
+    })
+    .catch(function() {
+        var t = document.getElementById('typing');
+        if (t) t.remove();
+        box.innerHTML += '<div class="msg-bot"><span style="color:#e94560">❌ Error! Try again.</span></div>';
+    });
+}
+
+function getAnalytics() {
+    var btn = event.target;
+    btn.textContent = 'Loading...';
+    btn.disabled = true;
+    fetch('/analytics')
+    .then(function(res) { return res.json(); })
+    .then(function(data) {
+        var d = data.data;
+        document.getElementById('total-users').textContent = d.total_users;
+        document.getElementById('active-today').textContent = d.active_today;
+        document.getElementById('avg-streak').textContent = d.avg_streak;
+        document.getElementById('top-exercise').textContent = d.top_exercise;
+        if (chartInstance) chartInstance.destroy();
+        chartInstance = new Chart(document.getElementById('weeklyChart'), {
+            type: 'bar',
+            data: {
+                labels: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],
+                datasets: [{
+                    label: 'Workouts This Week',
+                    data: d.weekly_workouts,
+                    backgroundColor: '#e94560cc',
+                    borderColor: '#e94560',
+                    borderWidth: 1,
+                    borderRadius: 8
+                }]
+            },
+            options: {
+                plugins: { legend: { labels: { color: 'white' }}},
+                scales: {
+                    x: { ticks: { color: '#aaa' }, grid: { color: '#ffffff0d' }},
+                    y: { ticks: { color: '#aaa' }, grid: { color: '#ffffff0d' }}
+                }
+            }
+        });
+        btn.textContent = 'Load Analytics';
+        btn.disabled = false;
+    })
+    .catch(function() {
+        alert('Error loading analytics!');
+        btn.textContent = 'Load Analytics';
+        btn.disabled = false;
+    });
+}
+</script>
+</body>
+</html>

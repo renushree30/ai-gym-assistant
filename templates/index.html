@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Gym & Fitness Assistant</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background: #0f0f0f; color: white; font-family: 'Segoe UI', sans-serif; }
+        .hero { background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+                min-height: 100vh; display: flex; align-items: center; }
+        .btn-glow { background: #e94560; border: none; padding: 14px 36px;
+                    border-radius: 30px; font-size: 18px; color: white;
+                    box-shadow: 0 0 20px #e9456066; }
+        .btn-glow:hover { background: #c73652; color: white; transform: scale(1.05); }
+        .feature-card { background: #1a1a2e; border: 1px solid #e9456033;
+                        border-radius: 16px; padding: 24px; margin: 12px 0;
+                        transition: transform 0.3s; }
+        .feature-card:hover { transform: translateY(-5px); border-color: #e94560; }
+        .icon { font-size: 40px; margin-bottom: 12px; }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container text-center">
+            <h1 class="display-3 fw-bold mb-3">🏋️ AI Gym & Fitness Assistant</h1>
+            <p class="lead mb-4" style="color:#aaa">Your personal AI trainer, dietician and motivator — all in one place</p>
+            <a href="/dashboard" class="btn btn-glow">Get Started Free</a>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="py-5">
+        <div class="container">
+            <h2 class="text-center mb-5">What I Can Do For You</h2>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="feature-card text-center">
+                        <div class="icon">🤸</div>
+                        <h5>AI Pose Detection</h5>
+                        <p style="color:#aaa">Real-time workout tracking with rep counting and form correction</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-card text-center">
+                        <div class="icon">🥗</div>
+                        <h5>Smart Diet Planner</h5>
+                        <p style="color:#aaa">Personalized meal plans based on your BMI and fitness goals</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-card text-center">
+                        <div class="icon">🔥</div>
+                        <h5>Habit Tracker</h5>
+                        <p style="color:#aaa">AI predicts when you might skip and sends motivational nudges</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

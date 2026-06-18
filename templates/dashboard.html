@@ -9,88 +9,45 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background: #0f0f0f; color: white; font-family: 'Segoe UI', sans-serif; }
-        .sidebar {
-            background: #1a1a2e; min-height: 100vh; padding: 24px 16px;
-            position: fixed; width: 220px; left: 0; top: 0;
-            border-right: 1px solid #ffffff11;
-        }
+        .sidebar { background: #1a1a2e; min-height: 100vh; padding: 24px 16px; position: fixed; width: 220px; left: 0; top: 0; border-right: 1px solid #ffffff11; overflow-y: auto; }
         .main-content { margin-left: 220px; padding: 32px; min-height: 100vh; }
-        .nav-link {
-            color: #aaa; border-radius: 8px; margin: 4px 0;
-            padding: 10px 14px; cursor: pointer; display: block;
-            text-decoration: none; transition: all 0.2s;
-        }
+        .nav-link { color: #aaa; border-radius: 8px; margin: 4px 0; padding: 10px 14px; cursor: pointer; display: block; text-decoration: none; transition: all 0.2s; }
         .nav-link:hover { background: #ffffff11; color: white; }
         .nav-link.active { background: #e94560; color: white; }
-        .card-dark {
-            background: #1a1a2e; border: 1px solid #ffffff11;
-            border-radius: 16px; padding: 24px; margin-bottom: 20px;
-        }
+        .card-dark { background: #1a1a2e; border: 1px solid #ffffff11; border-radius: 16px; padding: 24px; margin-bottom: 20px; }
         .section { display: none; }
         .section.active { display: block; }
-        input, select {
-            background: #0f0f0f !important; color: white !important;
-            border: 1px solid #ffffff22 !important; border-radius: 8px !important;
-        }
+        input, select { background: #0f0f0f !important; color: white !important; border: 1px solid #ffffff22 !important; border-radius: 8px !important; }
         input::placeholder { color: #666 !important; }
-        .btn-red {
-            background: #e94560; border: none; color: white;
-            border-radius: 8px; padding: 10px 24px;
-            cursor: pointer; transition: all 0.2s;
-        }
+        .btn-red { background: #e94560; border: none; color: white; border-radius: 8px; padding: 10px 24px; cursor: pointer; transition: all 0.2s; }
         .btn-red:hover { background: #c73652; color: white; transform: scale(1.02); }
-        #chat-box {
-            height: 380px; overflow-y: auto; background: #0a0a0a;
-            border-radius: 12px; padding: 16px; border: 1px solid #ffffff11;
-        }
+        .btn-blue { background: #185FA5; border: none; color: white; border-radius: 8px; padding: 10px 24px; cursor: pointer; transition: all 0.2s; margin-right: 8px; }
+        .btn-blue:hover { background: #0c447c; color: white; }
+        #chat-box { height: 380px; overflow-y: auto; background: #0a0a0a; border-radius: 12px; padding: 16px; border: 1px solid #ffffff11; }
         #chat-box::-webkit-scrollbar { width: 4px; }
         #chat-box::-webkit-scrollbar-thumb { background: #e94560; border-radius: 4px; }
         .msg-user { text-align: right; margin: 10px 0; }
-        .msg-user span {
-            background: #e94560; padding: 10px 16px;
-            border-radius: 18px 18px 4px 18px;
-            display: inline-block; max-width: 75%; font-size: 14px;
-        }
+        .msg-user span { background: #e94560; padding: 10px 16px; border-radius: 18px 18px 4px 18px; display: inline-block; max-width: 75%; font-size: 14px; }
         .msg-bot { text-align: left; margin: 10px 0; }
-        .msg-bot span {
-            background: #1a1a2e; padding: 10px 16px;
-            border-radius: 18px 18px 18px 4px; display: inline-block;
-            max-width: 75%; color: #ddd; font-size: 14px;
-            border: 1px solid #ffffff11; line-height: 1.5;
-        }
-        .stat-card {
-            background: #1a1a2e; border: 1px solid #e9456033;
-            border-radius: 16px; padding: 20px;
-            text-align: center; margin-bottom: 16px;
-        }
+        .msg-bot span { background: #1a1a2e; padding: 10px 16px; border-radius: 18px 18px 18px 4px; display: inline-block; max-width: 75%; color: #ddd; font-size: 14px; border: 1px solid #ffffff11; line-height: 1.5; }
+        .stat-card { background: #1a1a2e; border: 1px solid #e9456033; border-radius: 16px; padding: 20px; text-align: center; margin-bottom: 16px; }
         .stat-card h2 { color: #e94560; font-size: 2rem; font-weight: 700; }
         .stat-card p { color: #aaa; margin: 0; font-size: 14px; }
-        .result-box {
-            background: #0a0a0a; border: 1px solid #ffffff11;
-            border-radius: 12px; padding: 20px; margin-top: 16px;
-        }
+        .result-box { background: #0a0a0a; border: 1px solid #ffffff11; border-radius: 12px; padding: 20px; margin-top: 16px; }
         .result-box p { margin: 8px 0; font-size: 15px; }
         .badge-low { color: #00ff88; font-weight: 600; }
         .badge-medium { color: #ffcc00; font-weight: 600; }
         .badge-high { color: #e94560; font-weight: 600; }
-        .typing-dot {
-            display: inline-block; width: 6px; height: 6px;
-            background: #aaa; border-radius: 50%; margin: 0 2px;
-            animation: bounce 1s infinite;
-        }
+        .typing-dot { display: inline-block; width: 6px; height: 6px; background: #aaa; border-radius: 50%; margin: 0 2px; animation: bounce 1s infinite; }
         .typing-dot:nth-child(2) { animation-delay: 0.2s; }
         .typing-dot:nth-child(3) { animation-delay: 0.4s; }
-        @keyframes bounce {
-            0%, 80%, 100% { transform: translateY(0); }
-            40% { transform: translateY(-6px); }
-        }
-        .exercise-badge {
-            background: #e9456022; border: 1px solid #e9456055;
-            color: #e94560; padding: 6px 14px; border-radius: 20px;
-            display: inline-block; margin: 4px; font-size: 14px;
-        }
+        @keyframes bounce { 0%, 80%, 100% { transform: translateY(0); } 40% { transform: translateY(-6px); } }
+        .exercise-badge { background: #e9456022; border: 1px solid #e9456055; color: #e94560; padding: 6px 14px; border-radius: 20px; display: inline-block; margin: 4px; font-size: 14px; }
         h3 { font-size: 1.6rem; font-weight: 600; margin-bottom: 20px; }
         label { color: #aaa; font-size: 13px; margin-bottom: 4px; display: block; }
+        .gym-card { background: #0f0f0f; border: 1px solid #ffffff11; border-radius: 12px; padding: 14px; margin: 8px 0; display: flex; justify-content: space-between; align-items: center; }
+        .gym-card a { color: #e94560; text-decoration: none; font-size: 13px; }
+        .gym-card a:hover { text-decoration: underline; }
     </style>
 </head>
 <body>
@@ -101,10 +58,11 @@
         <a class="nav-link active" onclick="show('workout', this)">🤸 Workout</a>
         <a class="nav-link" onclick="show('diet', this)">🥗 Diet Planner</a>
         <a class="nav-link" onclick="show('habit', this)">🔥 Habit Tracker</a>
+        <a class="nav-link" onclick="show('behavior', this)">🧠 Behavior AI</a>
         <a class="nav-link" onclick="show('chat', this)">💬 AI Chat</a>
         <a class="nav-link" onclick="show('analytics', this)">📊 Analytics</a>
         <a class="nav-link" onclick="show('performance', this)">🏆 Performance</a>
-        <a class="nav-link" onclick="show('recommend', this)">🗺️ Recommender</a>
+        <a class="nav-link" onclick="show('recommend', this)">🗺️ Gym Finder</a>
         <a class="nav-link" onclick="show('iot', this)">📡 Smart Gym</a>
     </nav>
     <div style="position:absolute;bottom:24px;left:16px;right:16px">
@@ -169,10 +127,20 @@
         <div class="card-dark">
             <p style="color:#aaa;margin-bottom:16px">Enter your recent workout dates and AI will predict your skip risk and current streak.</p>
             <label>Your Workout Dates (comma separated)</label>
-            <input type="text" id="workout-log" class="form-control mb-3"
-                   placeholder="e.g. 2026-06-10, 2026-06-11, 2026-06-12">
+            <input type="text" id="workout-log" class="form-control mb-3" placeholder="e.g. 2026-06-10, 2026-06-11, 2026-06-12">
             <button class="btn-red" onclick="getHabit()">Analyze My Habit</button>
             <div id="habit-result"></div>
+        </div>
+    </div>
+
+    <div id="behavior" class="section">
+        <h3>🧠 Behavior Prediction AI</h3>
+        <div class="card-dark">
+            <p style="color:#aaa;margin-bottom:16px">Enter your workout history and AI will analyze your behavioral patterns and predict future consistency!</p>
+            <label>Your Workout Dates (comma separated)</label>
+            <input type="text" id="behavior-log" class="form-control mb-3" placeholder="e.g. 2026-06-10, 2026-06-11, 2026-06-14, 2026-06-16">
+            <button class="btn-red" onclick="getBehavior()">Analyze My Behavior</button>
+            <div id="behavior-result"></div>
         </div>
     </div>
 
@@ -185,39 +153,48 @@
                 </div>
             </div>
             <div class="d-flex gap-2 mt-3">
-                <input type="text" id="chat-input" class="form-control"
-                       placeholder="Ask me about diet, workout, motivation..."
-                       onkeypress="if(event.key==='Enter') sendChat()">
+                <input type="text" id="chat-input" class="form-control" placeholder="Ask me about diet, workout, motivation..." onkeypress="if(event.key==='Enter') sendChat()">
                 <button class="btn-red" onclick="sendChat()">Send</button>
             </div>
-            <div class="mt-2" style="color:#555;font-size:12px">
-                💡 Try: "what are protein rich foods" or "I feel lazy today" or "how to lose weight"
-            </div>
+            <div class="mt-2" style="color:#555;font-size:12px">💡 Try: "what are protein rich foods" or "I feel lazy today" or "how to lose weight"</div>
         </div>
     </div>
 
     <div id="analytics" class="section">
-        <h3>📊 Analytics Dashboard</h3>
+        <h3>📊 Admin Analytics Dashboard</h3>
         <div class="row">
-            <div class="col-md-3">
-                <div class="stat-card"><h2 id="total-users">-</h2><p>Total Users</p></div>
+            <div class="col-md-3"><div class="stat-card"><h2 id="total-users">-</h2><p>Total Users</p></div></div>
+            <div class="col-md-3"><div class="stat-card"><h2 id="active-today">-</h2><p>Active Today</p></div></div>
+            <div class="col-md-3"><div class="stat-card"><h2 id="avg-streak">-</h2><p>Avg Streak (days)</p></div></div>
+            <div class="col-md-3"><div class="stat-card"><h2 id="top-exercise" style="font-size:1.2rem;padding-top:8px">-</h2><p>Top Exercise</p></div></div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card-dark">
+                    <h5 style="margin-bottom:20px">Weekly Workout Activity</h5>
+                    <canvas id="weeklyChart" height="150"></canvas>
+                </div>
             </div>
-            <div class="col-md-3">
-                <div class="stat-card"><h2 id="active-today">-</h2><p>Active Today</p></div>
-            </div>
-            <div class="col-md-3">
-                <div class="stat-card"><h2 id="avg-streak">-</h2><p>Avg Streak (days)</p></div>
-            </div>
-            <div class="col-md-3">
-                <div class="stat-card">
-                    <h2 id="top-exercise" style="font-size:1.2rem;padding-top:8px">-</h2>
-                    <p>Top Exercise</p>
+            <div class="col-md-6">
+                <div class="card-dark">
+                    <h5 style="margin-bottom:20px">Module Usage Stats</h5>
+                    <canvas id="moduleChart" height="150"></canvas>
                 </div>
             </div>
         </div>
-        <div class="card-dark">
-            <h5 style="margin-bottom:20px">Weekly Workout Activity</h5>
-            <canvas id="weeklyChart" height="100"></canvas>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card-dark">
+                    <h5 style="margin-bottom:20px">BMI Distribution</h5>
+                    <canvas id="bmiChart" height="150"></canvas>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card-dark">
+                    <h5 style="margin-bottom:20px">Skip Risk Today</h5>
+                    <canvas id="skipChart" height="150"></canvas>
+                </div>
+            </div>
         </div>
         <button class="btn-red mt-3" onclick="getAnalytics()">Load Analytics</button>
     </div>
@@ -250,7 +227,7 @@
     </div>
 
     <div id="recommend" class="section">
-        <h3>🗺️ Gym Recommender & Planner</h3>
+        <h3>🗺️ Gym Recommender & Finder</h3>
         <div class="card-dark">
             <div class="row g-3">
                 <div class="col-md-4">
@@ -274,7 +251,11 @@
                     <input type="number" id="rec-days" class="form-control" value="3" min="1" max="7">
                 </div>
             </div>
-            <button class="btn-red mt-4" onclick="getRecommend()">Get My Plan</button>
+            <div class="mt-3 d-flex gap-2 align-items-center">
+                <button class="btn-blue" onclick="getLocation()">📍 Get My Location</button>
+                <span id="location-status" style="color:#aaa;font-size:13px">Location not detected yet</span>
+            </div>
+            <button class="btn-red mt-3" onclick="getRecommend()">Get My Plan + Nearby Gyms</button>
             <div id="recommend-result"></div>
         </div>
     </div>
@@ -311,12 +292,40 @@
 <script>
 var chatHistory = [];
 var chartInstance = null;
+var moduleChartInstance = null;
+var bmiChartInstance = null;
+var skipChartInstance = null;
+var userLat = null;
+var userLon = null;
 
 function show(section, el) {
     document.querySelectorAll('.section').forEach(function(s) { s.classList.remove('active'); });
     document.querySelectorAll('.nav-link').forEach(function(l) { l.classList.remove('active'); });
     document.getElementById(section).classList.add('active');
     el.classList.add('active');
+}
+
+function getLocation() {
+    var status = document.getElementById('location-status');
+    status.textContent = 'Detecting location...';
+    status.style.color = '#ffcc00';
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            function(pos) {
+                userLat = pos.coords.latitude;
+                userLon = pos.coords.longitude;
+                status.textContent = '✅ Location detected! (' + userLat.toFixed(4) + ', ' + userLon.toFixed(4) + ')';
+                status.style.color = '#00ff88';
+            },
+            function(err) {
+                status.textContent = '❌ Location denied. Allow location access and try again.';
+                status.style.color = '#e94560';
+            }
+        );
+    } else {
+        status.textContent = '❌ Geolocation not supported in this browser.';
+        status.style.color = '#e94560';
+    }
 }
 
 function getWorkout() {
@@ -365,6 +374,23 @@ function getHabit() {
     }).catch(function() { btn.textContent = 'Analyze My Habit'; btn.disabled = false; });
 }
 
+function getBehavior() {
+    var btn = event.target; btn.textContent = 'Analyzing...'; btn.disabled = true;
+    var log = document.getElementById('behavior-log').value.split(',').map(function(d) { return d.trim(); }).filter(function(d) { return d; });
+    fetch('/behavior', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ workout_log: log })
+    })
+    .then(function(res) { return res.json(); })
+    .then(function(data) {
+        var d = data.data;
+        var skipColor = d.skip_probability === 'Low' ? '#00ff88' : d.skip_probability === 'Medium' ? '#ffcc00' : '#e94560';
+        var consColor = d.consistency_score === 'Very High' || d.consistency_score === 'High' ? '#00ff88' : d.consistency_score === 'Medium' ? '#ffcc00' : '#e94560';
+        document.getElementById('behavior-result').innerHTML = '<div class="result-box"><p>🏋️ Total Workouts: <strong style="color:#e94560;font-size:1.2rem">' + d.total_workouts + '</strong></p><p>📈 Pattern: <strong>' + d.pattern + '</strong></p><p>💪 Consistency: <strong style="color:' + consColor + '">' + d.consistency_score + '</strong></p><p>📅 Avg Gap: <strong>' + d.avg_gap_days + ' days</strong></p><p>⚠️ Skip Probability: <strong style="color:' + skipColor + '">' + d.skip_probability + '</strong></p><p>🤖 ' + d.prediction + '</p><p style="margin-top:12px;background:#e9456022;padding:12px;border-radius:8px;border-left:3px solid #e94560">💬 ' + d.behavioral_nudge + '</p></div>';
+        btn.textContent = 'Analyze My Behavior'; btn.disabled = false;
+    }).catch(function() { btn.textContent = 'Analyze My Behavior'; btn.disabled = false; });
+}
+
 function sendChat() {
     var input = document.getElementById('chat-input');
     var msg = input.value.trim();
@@ -407,6 +433,24 @@ function getAnalytics() {
             data: { labels: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'], datasets: [{ label: 'Workouts', data: d.weekly_workouts, backgroundColor: '#e94560cc', borderColor: '#e94560', borderWidth: 1, borderRadius: 8 }] },
             options: { plugins: { legend: { labels: { color: 'white' }}}, scales: { x: { ticks: { color: '#aaa' }, grid: { color: '#ffffff0d' }}, y: { ticks: { color: '#aaa' }, grid: { color: '#ffffff0d' }}}}
         });
+        if (moduleChartInstance) moduleChartInstance.destroy();
+        moduleChartInstance = new Chart(document.getElementById('moduleChart'), {
+            type: 'bar',
+            data: { labels: Object.keys(d.module_usage), datasets: [{ label: 'Users', data: Object.values(d.module_usage), backgroundColor: '#534AB7cc', borderColor: '#534AB7', borderWidth: 1, borderRadius: 4 }] },
+            options: { indexAxis: 'y', plugins: { legend: { labels: { color: 'white' }}}, scales: { x: { ticks: { color: '#aaa' }, grid: { color: '#ffffff0d' }}, y: { ticks: { color: '#aaa' }, grid: { color: '#ffffff0d' }}}}
+        });
+        if (bmiChartInstance) bmiChartInstance.destroy();
+        bmiChartInstance = new Chart(document.getElementById('bmiChart'), {
+            type: 'doughnut',
+            data: { labels: Object.keys(d.bmi_distribution), datasets: [{ data: Object.values(d.bmi_distribution), backgroundColor: ['#ffcc00','#00ff88','#e94560','#ff6b35'], borderWidth: 0 }] },
+            options: { plugins: { legend: { labels: { color: 'white' }}}}
+        });
+        if (skipChartInstance) skipChartInstance.destroy();
+        skipChartInstance = new Chart(document.getElementById('skipChart'), {
+            type: 'pie',
+            data: { labels: ['Low Risk','Medium Risk','High Risk'], datasets: [{ data: Object.values(d.skip_risk_today), backgroundColor: ['#00ff88','#ffcc00','#e94560'], borderWidth: 0 }] },
+            options: { plugins: { legend: { labels: { color: 'white' }}}}
+        });
         btn.textContent = 'Load Analytics'; btn.disabled = false;
     }).catch(function() { btn.textContent = 'Load Analytics'; btn.disabled = false; });
 }
@@ -440,17 +484,22 @@ function getRecommend() {
         body: JSON.stringify({
             goal: document.getElementById('rec-goal').value,
             level: document.getElementById('rec-level').value,
-            days: +document.getElementById('rec-days').value
+            days: +document.getElementById('rec-days').value,
+            lat: userLat,
+            lon: userLon
         })
     })
     .then(function(res) { return res.json(); })
     .then(function(data) {
         var d = data.data;
         var exercises = d.recommended_exercises.map(function(e) { return '<span class="exercise-badge">' + e + '</span>'; }).join('');
-        var gyms = d.nearby_gyms.map(function(g) { return '<p>📍 <strong>' + g.name + '</strong> — ' + g.distance + ' ⭐ ' + g.rating + '</p>'; }).join('');
+        var gyms = d.nearby_gyms.map(function(g) {
+            var link = g.maps_url !== '#' ? '<a href="' + g.maps_url + '" target="_blank">📍 Open in Maps</a>' : '';
+            return '<div class="gym-card"><div><p style="margin:0;font-weight:600">' + g.name + '</p><p style="margin:0;color:#aaa;font-size:13px">' + g.distance + '</p></div>' + link + '</div>';
+        }).join('');
         document.getElementById('recommend-result').innerHTML = '<div class="result-box"><p>🎯 Goal: <strong>' + d.goal + '</strong> | Level: <strong>' + d.level + '</strong></p><div style="margin:8px 0">' + exercises + '</div><p style="margin-top:12px">🏋️ Nearby Gyms:</p>' + gyms + '<p style="margin-top:8px;color:#e94560">🔥 ' + d.challenge + '</p></div>';
-        btn.textContent = 'Get My Plan'; btn.disabled = false;
-    }).catch(function() { btn.textContent = 'Get My Plan'; btn.disabled = false; });
+        btn.textContent = 'Get My Plan + Nearby Gyms'; btn.disabled = false;
+    }).catch(function() { btn.textContent = 'Get My Plan + Nearby Gyms'; btn.disabled = false; });
 }
 
 function getIoT() {

@@ -3,7 +3,8 @@ from dotenv import load_dotenv
 from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
 from diet_model import get_diet_plan, get_bmi
-from habit_model import predict_skip, get_streak
+from habit_model import predict_skip, get_streak, behavior_prediction
+import requests
 
 load_dotenv()
 
@@ -48,6 +49,13 @@ def habit():
         "prediction": prediction,
         "streak": streak
     })
+
+@app.route('/behavior', methods=['POST'])
+def behavior():
+    data = request.get_json()
+    workout_log = data.get('workout_log', [])
+    result = behavior_prediction(workout_log)
+    return jsonify({"status": "success", "data": result})
 
 @app.route('/chat', methods=['POST'])
 def chat():
@@ -109,9 +117,30 @@ def analytics():
             "active_today": 38,
             "avg_streak": 4.2,
             "top_exercise": "Squats",
-            "weekly_workouts": [3, 5, 4, 6, 5, 7, 4]
+            "weekly_workouts": [3, 5, 4, 6, 5, 7, 4],
+            "module_usage": {
+                "Workout Trainer": 89,
+                "Diet Planner": 76,
+                "Habit Tracker": 65,
+                "AI Chat": 92,
+                "Performance": 54,
+                "Recommender": 48,
+                "IoT Assistant": 41
+            },
+            "bmi_distribution": {
+                "Underweight": 12,
+                "Normal": 58,
+                "Overweight": 22,
+                "Obese": 8
+            },
+            "skip_risk_today": {
+                "Low": 65,
+                "Medium": 25,
+                "High": 10
+            }
         }
     })
+
 @app.route('/performance', methods=['POST'])
 def performance():
     data = request.get_json()
@@ -158,12 +187,15 @@ def performance():
             }
         }
     })
+
 @app.route('/recommend', methods=['POST'])
 def recommend():
     data = request.get_json()
     goal = data.get('goal', 'weight loss')
     level = data.get('level', 'beginner')
     days = data.get('days', 3)
+    lat = data.get('lat', None)
+    lon = data.get('lon', None)
 
     plans = {
         'weight loss': {
@@ -183,13 +215,48 @@ def recommend():
         }
     }
 
-    nearby_gyms = [
-        {"name": "FitLife Gym", "distance": "0.5 km", "rating": "4.5"},
-        {"name": "PowerZone Fitness", "distance": "1.2 km", "rating": "4.3"},
-        {"name": "HealthFirst Club", "distance": "2.0 km", "rating": "4.7"}
-    ]
-
     workout_plan = plans.get(goal, plans['maintain']).get(level, ['Basic workout'])
+    nearby_gyms = []
+
+    if lat and lon:
+        try:
+            overpass_url = "https://overpass-api.de/api/interpreter"
+            overpass_query = f"""
+            [out:json];
+            (
+              node["leisure"="fitness_centre"](around:3000,{lat},{lon});
+              node["amenity"="gym"](around:3000,{lat},{lon});
+              way["leisure"="fitness_centre"](around:3000,{lat},{lon});
+            );
+            out center 10;
+            """
+            response = requests.post(overpass_url, data=overpass_query, timeout=10)
+            results = response.json()
+
+            for element in results.get('elements', [])[:5]:
+                tags = element.get('tags', {})
+                name = tags.get('name', 'Unnamed Gym')
+                elem_lat = element.get('lat') or element.get('center', {}).get('lat', lat)
+                elem_lon = element.get('lon') or element.get('center', {}).get('lon', lon)
+
+                dlat = float(elem_lat) - float(lat)
+                dlon = float(elem_lon) - float(lon)
+                dist_km = round(((dlat**2 + dlon**2) ** 0.5) * 111, 1)
+
+                nearby_gyms.append({
+                    "name": name,
+                    "distance": f"{dist_km} km",
+                    "lat": elem_lat,
+                    "lon": elem_lon,
+                    "maps_url": f"https://www.google.com/maps?q={elem_lat},{elem_lon}"
+                })
+
+            nearby_gyms.sort(key=lambda x: float(x['distance'].replace(' km', '')))
+
+        except Exception as e:
+            nearby_gyms = [{"name": "Could not fetch gyms — try again", "distance": "-", "maps_url": "#"}]
+    else:
+        nearby_gyms = [{"name": "Click Get My Location first!", "distance": "-", "maps_url": "#"}]
 
     return jsonify({
         "status": "success",
@@ -202,6 +269,7 @@ def recommend():
             "challenge": f"Complete {days} workouts this week — you got this! 💪"
         }
     })
+
 @app.route('/iot', methods=['POST'])
 def iot():
     data = request.get_json()

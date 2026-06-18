@@ -222,41 +222,61 @@ def recommend():
         try:
             overpass_url = "https://overpass-api.de/api/interpreter"
             overpass_query = f"""
-            [out:json];
+            [out:json][timeout:25];
             (
-              node["leisure"="fitness_centre"](around:3000,{lat},{lon});
-              node["amenity"="gym"](around:3000,{lat},{lon});
-              way["leisure"="fitness_centre"](around:3000,{lat},{lon});
+              node["leisure"="fitness_centre"](around:5000,{lat},{lon});
+              node["amenity"="gym"](around:5000,{lat},{lon});
+              node["sport"="fitness"](around:5000,{lat},{lon});
+              way["leisure"="fitness_centre"](around:5000,{lat},{lon});
             );
-            out center 10;
+            out center 8;
             """
-            response = requests.post(overpass_url, data=overpass_query, timeout=10)
+            response = requests.post(
+                overpass_url,
+                data={"data": overpass_query},
+                timeout=25,
+                headers={"User-Agent": "AIGymAssistant/1.0"}
+            )
             results = response.json()
+            elements = results.get('elements', [])
 
-            for element in results.get('elements', [])[:5]:
+            for element in elements[:5]:
                 tags = element.get('tags', {})
-                name = tags.get('name', 'Unnamed Gym')
+                name = tags.get('name', 'Gym / Fitness Centre')
                 elem_lat = element.get('lat') or element.get('center', {}).get('lat', lat)
                 elem_lon = element.get('lon') or element.get('center', {}).get('lon', lon)
-
                 dlat = float(elem_lat) - float(lat)
                 dlon = float(elem_lon) - float(lon)
-                dist_km = round(((dlat**2 + dlon**2) ** 0.5) * 111, 1)
-
+                dist_km = round(((dlat**2 + dlon**2) ** 0.5) * 111, 2)
                 nearby_gyms.append({
                     "name": name,
                     "distance": f"{dist_km} km",
                     "lat": elem_lat,
                     "lon": elem_lon,
-                    "maps_url": f"https://www.google.com/maps?q={elem_lat},{elem_lon}"
+                    "maps_url": f"https://www.google.com/maps/search/gym/@{elem_lat},{elem_lon},17z"
                 })
 
             nearby_gyms.sort(key=lambda x: float(x['distance'].replace(' km', '')))
 
+            if not nearby_gyms:
+                nearby_gyms = [{
+                    "name": "🔍 Search Gyms Near Me on Google Maps",
+                    "distance": "Click to open",
+                    "maps_url": f"https://www.google.com/maps/search/gym+near+me/@{lat},{lon},14z"
+                }]
+
         except Exception as e:
-            nearby_gyms = [{"name": "Could not fetch gyms — try again", "distance": "-", "maps_url": "#"}]
+            nearby_gyms = [{
+                "name": "🔍 Search Gyms Near Me on Google Maps",
+                "distance": "Click to open",
+                "maps_url": f"https://www.google.com/maps/search/gym+near+me/@{lat},{lon},14z"
+            }]
     else:
-        nearby_gyms = [{"name": "Click Get My Location first!", "distance": "-", "maps_url": "#"}]
+        nearby_gyms = [{
+            "name": "📍 Click Get My Location first!",
+            "distance": "-",
+            "maps_url": "#"
+        }]
 
     return jsonify({
         "status": "success",

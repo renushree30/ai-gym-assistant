@@ -9,9 +9,9 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background: #0f0f0f; color: white; font-family: 'Segoe UI', sans-serif; }
-        .sidebar { background: #1a1a2e; min-height: 100vh; padding: 24px 16px; position: fixed; width: 220px; left: 0; top: 0; border-right: 1px solid #ffffff11; overflow-y: auto; }
-        .main-content { margin-left: 220px; padding: 32px; min-height: 100vh; }
-        .nav-link { color: #aaa; border-radius: 8px; margin: 4px 0; padding: 10px 14px; cursor: pointer; display: block; text-decoration: none; transition: all 0.2s; }
+        .sidebar { background: #1a1a2e; min-height: 100vh; padding: 20px 16px; position: fixed; width: 230px; left: 0; top: 0; border-right: 1px solid #ffffff11; overflow-y: auto; }
+        .main-content { margin-left: 230px; padding: 32px; min-height: 100vh; }
+        .nav-link { color: #aaa; border-radius: 8px; margin: 3px 0; padding: 9px 12px; cursor: pointer; display: block; text-decoration: none; transition: all 0.2s; font-size: 14px; }
         .nav-link:hover { background: #ffffff11; color: white; }
         .nav-link.active { background: #e94560; color: white; }
         .card-dark { background: #1a1a2e; border: 1px solid #ffffff11; border-radius: 16px; padding: 24px; margin-bottom: 20px; }
@@ -20,19 +20,16 @@
         input, select { background: #0f0f0f !important; color: white !important; border: 1px solid #ffffff22 !important; border-radius: 8px !important; }
         input::placeholder { color: #666 !important; }
         .btn-red { background: #e94560; border: none; color: white; border-radius: 8px; padding: 10px 24px; cursor: pointer; transition: all 0.2s; }
-        .btn-red:hover { background: #c73652; color: white; transform: scale(1.02); }
-        .btn-blue { background: #185FA5; border: none; color: white; border-radius: 8px; padding: 10px 24px; cursor: pointer; transition: all 0.2s; margin-right: 8px; }
-        .btn-blue:hover { background: #0c447c; color: white; }
-        #chat-box { height: 380px; overflow-y: auto; background: #0a0a0a; border-radius: 12px; padding: 16px; border: 1px solid #ffffff11; }
-        #chat-box::-webkit-scrollbar { width: 4px; }
-        #chat-box::-webkit-scrollbar-thumb { background: #e94560; border-radius: 4px; }
-        .msg-user { text-align: right; margin: 10px 0; }
-        .msg-user span { background: #e94560; padding: 10px 16px; border-radius: 18px 18px 4px 18px; display: inline-block; max-width: 75%; font-size: 14px; }
-        .msg-bot { text-align: left; margin: 10px 0; }
-        .msg-bot span { background: #1a1a2e; padding: 10px 16px; border-radius: 18px 18px 18px 4px; display: inline-block; max-width: 75%; color: #ddd; font-size: 14px; border: 1px solid #ffffff11; line-height: 1.5; }
+        .btn-red:hover { background: #c73652; transform: scale(1.02); }
+        .btn-blue { background: #185FA5; border: none; color: white; border-radius: 8px; padding: 10px 20px; cursor: pointer; margin-right: 8px; }
+        #chat-box { height: 350px; overflow-y: auto; background: #0a0a0a; border-radius: 12px; padding: 16px; border: 1px solid #ffffff11; }
+        .msg-user { text-align: right; margin: 8px 0; }
+        .msg-user span { background: #e94560; padding: 8px 14px; border-radius: 18px 18px 4px 18px; display: inline-block; max-width: 75%; font-size: 14px; }
+        .msg-bot { text-align: left; margin: 8px 0; }
+        .msg-bot span { background: #1a1a2e; padding: 8px 14px; border-radius: 18px 18px 18px 4px; display: inline-block; max-width: 75%; color: #ddd; font-size: 14px; border: 1px solid #ffffff11; }
         .stat-card { background: #1a1a2e; border: 1px solid #e9456033; border-radius: 16px; padding: 20px; text-align: center; margin-bottom: 16px; }
         .stat-card h2 { color: #e94560; font-size: 2rem; font-weight: 700; }
-        .stat-card p { color: #aaa; margin: 0; font-size: 14px; }
+        .stat-card p { color: #aaa; margin: 0; font-size: 13px; }
         .result-box { background: #0a0a0a; border: 1px solid #ffffff11; border-radius: 12px; padding: 20px; margin-top: 16px; }
         .result-box p { margin: 8px 0; font-size: 15px; }
         .badge-low { color: #00ff88; font-weight: 600; }
@@ -42,20 +39,34 @@
         .typing-dot:nth-child(2) { animation-delay: 0.2s; }
         .typing-dot:nth-child(3) { animation-delay: 0.4s; }
         @keyframes bounce { 0%, 80%, 100% { transform: translateY(0); } 40% { transform: translateY(-6px); } }
-        .exercise-badge { background: #e9456022; border: 1px solid #e9456055; color: #e94560; padding: 6px 14px; border-radius: 20px; display: inline-block; margin: 4px; font-size: 14px; }
-        h3 { font-size: 1.6rem; font-weight: 600; margin-bottom: 20px; }
-        label { color: #aaa; font-size: 13px; margin-bottom: 4px; display: block; }
-        .gym-card { background: #0f0f0f; border: 1px solid #ffffff11; border-radius: 12px; padding: 14px; margin: 8px 0; display: flex; justify-content: space-between; align-items: center; }
+        .exercise-badge { background: #e9456022; border: 1px solid #e9456055; color: #e94560; padding: 5px 12px; border-radius: 20px; display: inline-block; margin: 3px; font-size: 13px; }
+        .health-alert { background: #ffcc0011; border: 1px solid #ffcc00; border-left: 4px solid #ffcc00; border-radius: 8px; padding: 12px; margin: 6px 0; font-size: 13px; color: #ffcc00; }
+        .gym-card { background: #0f0f0f; border: 1px solid #ffffff11; border-radius: 10px; padding: 12px; margin: 6px 0; display: flex; justify-content: space-between; align-items: center; }
         .gym-card a { color: #e94560; text-decoration: none; font-size: 13px; }
-        .gym-card a:hover { text-decoration: underline; }
+        h3 { font-size: 1.5rem; font-weight: 600; margin-bottom: 20px; }
+        label { color: #aaa; font-size: 13px; margin-bottom: 4px; display: block; }
+        .profile-box { background: #0f0f0f; border-radius: 12px; padding: 14px; margin-bottom: 16px; border: 1px solid #ffffff11; }
+        .profile-box .name { font-weight: 700; font-size: 15px; color: white; }
+        .profile-box .info { font-size: 12px; color: #aaa; margin: 2px 0; }
+        .profile-box .goal { font-size: 12px; color: #e94560; }
+        .history-item { background: #0f0f0f; border-radius: 8px; padding: 10px 14px; margin: 6px 0; border: 1px solid #ffffff11; font-size: 13px; }
     </style>
 </head>
 <body>
 
 <div class="sidebar">
-    <h5 class="text-center mb-4" style="color:#e94560;font-weight:700">🏋️ AI Gym</h5>
+    <h5 class="text-center mb-3" style="color:#e94560;font-weight:700;font-size:16px">🏋️ AI Gym</h5>
+
+    <div class="profile-box" id="profile-box">
+        <p class="name" id="sidebar-name">Loading...</p>
+        <p class="info" id="sidebar-bmi"></p>
+        <p class="goal" id="sidebar-goal"></p>
+        <p class="info" id="sidebar-health" style="color:#ffcc00"></p>
+    </div>
+
     <nav>
-        <a class="nav-link active" onclick="show('workout', this)">🤸 Workout</a>
+        <a class="nav-link active" onclick="show('home', this)">🏠 My Profile</a>
+        <a class="nav-link" onclick="show('workout', this)">🤸 Workout</a>
         <a class="nav-link" onclick="show('diet', this)">🥗 Diet Planner</a>
         <a class="nav-link" onclick="show('habit', this)">🔥 Habit Tracker</a>
         <a class="nav-link" onclick="show('behavior', this)">🧠 Behavior AI</a>
@@ -64,42 +75,58 @@
         <a class="nav-link" onclick="show('performance', this)">🏆 Performance</a>
         <a class="nav-link" onclick="show('recommend', this)">🗺️ Gym Finder</a>
         <a class="nav-link" onclick="show('iot', this)">📡 Smart Gym</a>
+        <a class="nav-link" onclick="show('history', this)">📋 My History</a>
     </nav>
-    <div style="position:absolute;bottom:24px;left:16px;right:16px">
-        <a href="/" style="color:#aaa;font-size:13px;text-decoration:none">← Back to Home</a>
+
+    <div style="margin-top:20px;padding-top:16px;border-top:1px solid #ffffff11">
+        <button onclick="logoutUser()" style="background:#e9456022;border:1px solid #e94560;color:#e94560;border-radius:8px;padding:8px;width:100%;cursor:pointer;font-size:13px">🚪 Logout</button>
     </div>
 </div>
 
 <div class="main-content">
 
-    <div id="workout" class="section active">
+    <!-- Profile Home -->
+    <div id="home" class="section active">
+        <h3>🏠 My Profile</h3>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card-dark">
+                    <h5 style="margin-bottom:16px;color:#e94560">👤 Personal Details</h5>
+                    <div id="profile-details" style="color:#ddd;font-size:15px;line-height:2"></div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card-dark">
+                    <h5 style="margin-bottom:16px;color:#e94560">⚕️ Health Conditions</h5>
+                    <div id="health-conditions-list"></div>
+                </div>
+            </div>
+        </div>
+        <div id="health-warnings-home"></div>
+    </div>
+
+    <!-- Workout -->
+    <div id="workout" class="section">
         <h3>🤸 AI Workout Trainer</h3>
+        <div id="workout-health-warning"></div>
         <div class="card-dark">
-            <p style="color:#aaa;margin-bottom:16px">Your AI trainer analyzes your pose in real time using webcam, counts reps and corrects your form automatically.</p>
+            <p style="color:#aaa;margin-bottom:16px">Your AI trainer analyzes your pose in real time, counts reps and corrects your form.</p>
             <button class="btn-red" onclick="getWorkout()">Load Today's Plan</button>
             <div id="workout-result" class="mt-4"></div>
         </div>
         <div class="card-dark">
-            <h5 style="margin-bottom:16px">💡 Quick Tips</h5>
-            <p style="color:#aaa;font-size:14px">✅ Stand 1.5-2 metres from camera for best pose detection</p>
-            <p style="color:#aaa;font-size:14px">✅ Make sure your full body is visible in the frame</p>
-            <p style="color:#aaa;font-size:14px">✅ Good lighting helps the AI detect your joints better</p>
-            <p style="color:#aaa;font-size:14px">✅ Press Q to quit the webcam window</p>
+            <h5 style="margin-bottom:12px">💡 Tips</h5>
+            <p style="color:#aaa;font-size:14px">✅ Stand 1.5-2m from camera • ✅ Full body visible • ✅ Good lighting • ✅ Press Q to quit</p>
         </div>
     </div>
 
+    <!-- Diet -->
     <div id="diet" class="section">
         <h3>🥗 AI Dietician & Calorie Coach</h3>
         <div class="card-dark">
             <div class="row g-3">
-                <div class="col-md-3">
-                    <label>Weight (kg)</label>
-                    <input type="number" id="weight" class="form-control" value="70">
-                </div>
-                <div class="col-md-3">
-                    <label>Height (cm)</label>
-                    <input type="number" id="height" class="form-control" value="165">
-                </div>
+                <div class="col-md-3"><label>Weight (kg)</label><input type="number" id="weight" class="form-control" value="70"></div>
+                <div class="col-md-3"><label>Height (cm)</label><input type="number" id="height" class="form-control" value="165"></div>
                 <div class="col-md-3">
                     <label>Goal</label>
                     <select id="goal" class="form-control">
@@ -109,7 +136,7 @@
                     </select>
                 </div>
                 <div class="col-md-3">
-                    <label>Food Preference</label>
+                    <label>Preference</label>
                     <select id="preference" class="form-control">
                         <option value="vegetarian">Vegetarian</option>
                         <option value="non-vegetarian">Non-Vegetarian</option>
@@ -122,87 +149,68 @@
         </div>
     </div>
 
+    <!-- Habit -->
     <div id="habit" class="section">
         <h3>🔥 AI Fitness Habit Tracker</h3>
         <div class="card-dark">
-            <p style="color:#aaa;margin-bottom:16px">Enter your recent workout dates and AI will predict your skip risk and current streak.</p>
-            <label>Your Workout Dates (comma separated)</label>
+            <p style="color:#aaa;margin-bottom:16px">Enter your workout dates to analyze streak and skip risk.</p>
+            <label>Workout Dates (comma separated)</label>
             <input type="text" id="workout-log" class="form-control mb-3" placeholder="e.g. 2026-06-10, 2026-06-11, 2026-06-12">
             <button class="btn-red" onclick="getHabit()">Analyze My Habit</button>
             <div id="habit-result"></div>
         </div>
     </div>
 
+    <!-- Behavior -->
     <div id="behavior" class="section">
         <h3>🧠 Behavior Prediction AI</h3>
         <div class="card-dark">
-            <p style="color:#aaa;margin-bottom:16px">Enter your workout history and AI will analyze your behavioral patterns and predict future consistency!</p>
-            <label>Your Workout Dates (comma separated)</label>
-            <input type="text" id="behavior-log" class="form-control mb-3" placeholder="e.g. 2026-06-10, 2026-06-11, 2026-06-14, 2026-06-16">
+            <p style="color:#aaa;margin-bottom:16px">AI analyzes your workout patterns and predicts future behavior.</p>
+            <label>Workout Dates (comma separated)</label>
+            <input type="text" id="behavior-log" class="form-control mb-3" placeholder="e.g. 2026-06-10, 2026-06-11, 2026-06-14">
             <button class="btn-red" onclick="getBehavior()">Analyze My Behavior</button>
             <div id="behavior-result"></div>
         </div>
     </div>
 
+    <!-- Chat -->
     <div id="chat" class="section">
         <h3>💬 Virtual Gym Buddy</h3>
         <div class="card-dark">
             <div id="chat-box">
-                <div class="msg-bot">
-                    <span>👋 Hey! I am your AI Fitness Assistant. Ask me anything about diet, workouts, protein, calories or motivation! 💪</span>
-                </div>
+                <div class="msg-bot"><span>👋 Hey! I am your AI Fitness Assistant. Ask me anything about diet, workouts, protein or motivation! 💪</span></div>
             </div>
             <div class="d-flex gap-2 mt-3">
-                <input type="text" id="chat-input" class="form-control" placeholder="Ask me about diet, workout, motivation..." onkeypress="if(event.key==='Enter') sendChat()">
+                <input type="text" id="chat-input" class="form-control" placeholder="Ask about diet, workout, motivation..." onkeypress="if(event.key==='Enter') sendChat()">
                 <button class="btn-red" onclick="sendChat()">Send</button>
             </div>
-            <div class="mt-2" style="color:#555;font-size:12px">💡 Try: "what are protein rich foods" or "I feel lazy today" or "how to lose weight"</div>
         </div>
     </div>
 
+    <!-- Analytics -->
     <div id="analytics" class="section">
         <h3>📊 Admin Analytics Dashboard</h3>
         <div class="row">
             <div class="col-md-3"><div class="stat-card"><h2 id="total-users">-</h2><p>Total Users</p></div></div>
-            <div class="col-md-3"><div class="stat-card"><h2 id="active-today">-</h2><p>Active Today</p></div></div>
-            <div class="col-md-3"><div class="stat-card"><h2 id="avg-streak">-</h2><p>Avg Streak (days)</p></div></div>
-            <div class="col-md-3"><div class="stat-card"><h2 id="top-exercise" style="font-size:1.2rem;padding-top:8px">-</h2><p>Top Exercise</p></div></div>
+            <div class="col-md-3"><div class="stat-card"><h2 id="active-today">-</h2><p>Total Workouts</p></div></div>
+            <div class="col-md-3"><div class="stat-card"><h2 id="avg-streak">-</h2><p>Avg Streak</p></div></div>
+            <div class="col-md-3"><div class="stat-card"><h2 id="heart-patients" style="font-size:1.5rem;padding-top:4px">-</h2><p>Heart Patients</p></div></div>
         </div>
         <div class="row">
-            <div class="col-md-6">
-                <div class="card-dark">
-                    <h5 style="margin-bottom:20px">Weekly Workout Activity</h5>
-                    <canvas id="weeklyChart" height="150"></canvas>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="card-dark">
-                    <h5 style="margin-bottom:20px">Module Usage Stats</h5>
-                    <canvas id="moduleChart" height="150"></canvas>
-                </div>
-            </div>
+            <div class="col-md-6"><div class="card-dark"><h5 style="margin-bottom:16px">Weekly Activity</h5><canvas id="weeklyChart" height="150"></canvas></div></div>
+            <div class="col-md-6"><div class="card-dark"><h5 style="margin-bottom:16px">Module Usage</h5><canvas id="moduleChart" height="150"></canvas></div></div>
         </div>
         <div class="row">
-            <div class="col-md-6">
-                <div class="card-dark">
-                    <h5 style="margin-bottom:20px">BMI Distribution</h5>
-                    <canvas id="bmiChart" height="150"></canvas>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="card-dark">
-                    <h5 style="margin-bottom:20px">Skip Risk Today</h5>
-                    <canvas id="skipChart" height="150"></canvas>
-                </div>
-            </div>
+            <div class="col-md-6"><div class="card-dark"><h5 style="margin-bottom:16px">BMI Distribution</h5><canvas id="bmiChart" height="150"></canvas></div></div>
+            <div class="col-md-6"><div class="card-dark"><h5 style="margin-bottom:16px">Skip Risk Today</h5><canvas id="skipChart" height="150"></canvas></div></div>
         </div>
         <button class="btn-red mt-3" onclick="getAnalytics()">Load Analytics</button>
     </div>
 
+    <!-- Performance -->
     <div id="performance" class="section">
         <h3>🏆 Pose-to-Performance Analyzer</h3>
         <div class="card-dark">
-            <p style="color:#aaa;margin-bottom:16px">Enter your workout details to get your Performance Score and weekly report!</p>
             <div class="row g-3">
                 <div class="col-md-4">
                     <label>Exercise</label>
@@ -212,30 +220,25 @@
                         <option value="plank">Plank</option>
                     </select>
                 </div>
-                <div class="col-md-4">
-                    <label>Reps Completed</label>
-                    <input type="number" id="perf-reps" class="form-control" value="15">
-                </div>
-                <div class="col-md-4">
-                    <label>Duration (minutes)</label>
-                    <input type="number" id="perf-duration" class="form-control" value="5">
-                </div>
+                <div class="col-md-4"><label>Reps</label><input type="number" id="perf-reps" class="form-control" value="15"></div>
+                <div class="col-md-4"><label>Duration (mins)</label><input type="number" id="perf-duration" class="form-control" value="5"></div>
             </div>
             <button class="btn-red mt-4" onclick="getPerformance()">Analyze Performance</button>
             <div id="performance-result"></div>
         </div>
     </div>
 
+    <!-- Gym Finder -->
     <div id="recommend" class="section">
         <h3>🗺️ Gym Recommender & Finder</h3>
         <div class="card-dark">
             <div class="row g-3">
                 <div class="col-md-4">
-                    <label>Your Goal</label>
+                    <label>Goal</label>
                     <select id="rec-goal" class="form-control">
                         <option value="weight loss">Weight Loss</option>
                         <option value="muscle gain">Muscle Gain</option>
-                        <option value="maintain">Maintain Fitness</option>
+                        <option value="maintain">Maintain</option>
                     </select>
                 </div>
                 <div class="col-md-4">
@@ -246,33 +249,25 @@
                         <option value="advanced">Advanced</option>
                     </select>
                 </div>
-                <div class="col-md-4">
-                    <label>Days Per Week</label>
-                    <input type="number" id="rec-days" class="form-control" value="3" min="1" max="7">
-                </div>
+                <div class="col-md-4"><label>Days Per Week</label><input type="number" id="rec-days" class="form-control" value="3" min="1" max="7"></div>
             </div>
-            <div class="mt-3 d-flex gap-2 align-items-center">
+            <div class="mt-3 d-flex align-items-center gap-3">
                 <button class="btn-blue" onclick="getLocation()">📍 Get My Location</button>
-                <span id="location-status" style="color:#aaa;font-size:13px">Location not detected yet</span>
+                <span id="location-status" style="color:#aaa;font-size:13px">Not detected yet</span>
             </div>
-            <button class="btn-red mt-3" onclick="getRecommend()">Get My Plan + Nearby Gyms</button>
+            <button class="btn-red mt-3" onclick="getRecommend()">Get Plan + Find Nearby Gyms</button>
             <div id="recommend-result"></div>
         </div>
     </div>
 
+    <!-- IoT -->
     <div id="iot" class="section">
         <h3>📡 Smart Gym Assistant (IoT)</h3>
         <div class="card-dark">
-            <p style="color:#aaa;margin-bottom:16px">Simulate IoT sensor data to get AI-powered gym equipment recommendations!</p>
+            <p style="color:#aaa;margin-bottom:16px">Simulate IoT sensor data for AI-powered gym recommendations!</p>
             <div class="row g-3">
-                <div class="col-md-4">
-                    <label>Heart Rate (BPM)</label>
-                    <input type="number" id="iot-hr" class="form-control" value="120">
-                </div>
-                <div class="col-md-4">
-                    <label>Reps Done</label>
-                    <input type="number" id="iot-reps" class="form-control" value="10">
-                </div>
+                <div class="col-md-4"><label>Heart Rate (BPM)</label><input type="number" id="iot-hr" class="form-control" value="120"></div>
+                <div class="col-md-4"><label>Reps Done</label><input type="number" id="iot-reps" class="form-control" value="10"></div>
                 <div class="col-md-4">
                     <label>Fatigue Level</label>
                     <select id="iot-fatigue" class="form-control">
@@ -287,6 +282,15 @@
         </div>
     </div>
 
+    <!-- History -->
+    <div id="history" class="section">
+        <h3>📋 My Workout History</h3>
+        <div class="card-dark">
+            <button class="btn-red mb-3" onclick="loadHistory()">Load My History</button>
+            <div id="history-result"></div>
+        </div>
+    </div>
+
 </div>
 
 <script>
@@ -297,6 +301,106 @@ var bmiChartInstance = null;
 var skipChartInstance = null;
 var userLat = null;
 var userLon = null;
+var currentUser = null;
+var userEmail = localStorage.getItem('gym_user_email');
+
+// Check login
+if (!userEmail) { window.location.href = '/login'; }
+
+// Load user data
+var storedUser = localStorage.getItem('gym_user_data');
+if (storedUser) {
+    currentUser = JSON.parse(storedUser);
+    loadUserProfile();
+} else {
+    fetch('/get_user?email=' + userEmail)
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+        if (data.status === 'success') {
+            currentUser = data.user;
+            localStorage.setItem('gym_user_data', JSON.stringify(currentUser));
+            loadUserProfile();
+        } else {
+            window.location.href = '/login';
+        }
+    });
+}
+
+function loadUserProfile() {
+    if (!currentUser) return;
+
+    // Sidebar
+    document.getElementById('sidebar-name').textContent = '👤 ' + currentUser.name;
+    document.getElementById('sidebar-bmi').textContent = 'BMI: ' + currentUser.bmi + ' — ' + currentUser.bmi_category;
+    document.getElementById('sidebar-goal').textContent = '🎯 ' + currentUser.goal;
+
+    var conditions = currentUser.health_conditions || [];
+    if (conditions.length > 0 && !conditions.includes('none')) {
+        document.getElementById('sidebar-health').textContent = '⚕️ Health conditions noted';
+    }
+
+    // Profile page
+    var bmiColor = currentUser.bmi_category === 'Normal' ? '#00ff88' : currentUser.bmi_category === 'Underweight' ? '#ffcc00' : '#e94560';
+    document.getElementById('profile-details').innerHTML =
+        '<p>👤 <strong>' + currentUser.name + '</strong></p>' +
+        '<p>📧 ' + currentUser.email + '</p>' +
+        '<p>🎂 Age: ' + currentUser.age + ' | ' + currentUser.gender + '</p>' +
+        '<p>⚖️ Weight: ' + currentUser.weight + ' kg | Height: ' + currentUser.height + ' cm</p>' +
+        '<p>📊 BMI: <strong style="color:' + bmiColor + '">' + currentUser.bmi + ' — ' + currentUser.bmi_category + '</strong></p>' +
+        '<p>🎯 Goal: <strong>' + currentUser.goal + '</strong></p>' +
+        '<p>🥗 Diet: ' + currentUser.diet + '</p>' +
+        '<p>📅 Joined: ' + (currentUser.registered_on || 'Today') + '</p>';
+
+    // Health conditions
+    var conditionLabels = {
+        'heart': '❤️ Heart Patient / Cardiovascular Disease',
+        'diabetes': '🩸 Diabetes',
+        'joint': '🦴 Joint Pain / Arthritis',
+        'bp': '💊 High Blood Pressure',
+        'asthma': '🫁 Asthma',
+        'back': '🔙 Back Pain',
+        'none': '✅ No Health Conditions'
+    };
+
+    if (conditions.length === 0) {
+        document.getElementById('health-conditions-list').innerHTML = '<p style="color:#aaa">No conditions recorded</p>';
+    } else {
+        var html = conditions.map(function(c) {
+            return '<div style="padding:8px 12px;background:#0f0f0f;border-radius:8px;margin:4px 0;font-size:14px">' + (conditionLabels[c] || c) + '</div>';
+        }).join('');
+        document.getElementById('health-conditions-list').innerHTML = html;
+    }
+
+    // Health warnings
+    var warnings = getHealthWarnings();
+    if (warnings.length > 0) {
+        var wHtml = '<div class="card-dark"><h5 style="color:#ffcc00;margin-bottom:12px">⚠️ Personalized Health Alerts</h5>' +
+            warnings.map(function(w) { return '<div class="health-alert">' + w + '</div>'; }).join('') + '</div>';
+        document.getElementById('health-warnings-home').innerHTML = wHtml;
+        document.getElementById('workout-health-warning').innerHTML = wHtml;
+    }
+
+    // Pre-fill diet form
+    if (document.getElementById('weight')) {
+        document.getElementById('weight').value = currentUser.weight || 70;
+        document.getElementById('height').value = currentUser.height || 165;
+        if (currentUser.goal) document.getElementById('goal').value = currentUser.goal;
+        if (currentUser.diet) document.getElementById('preference').value = currentUser.diet;
+    }
+}
+
+function getHealthWarnings() {
+    if (!currentUser) return [];
+    var conditions = currentUser.health_conditions || [];
+    var warnings = [];
+    if (conditions.includes('heart')) warnings.push('❤️ HEART PATIENT: Avoid heavy lifting and high intensity exercises. Stick to light walking, yoga and breathing exercises. Always consult your doctor before any workout!');
+    if (conditions.includes('diabetes')) warnings.push('🩸 DIABETES: Monitor blood sugar before and after workouts. Always carry glucose tablets. Avoid fasted workouts and prolonged intense exercise.');
+    if (conditions.includes('joint')) warnings.push('🦴 JOINT PAIN: Avoid high impact exercises like running and jumping. Prefer low-impact activities — swimming, cycling, light stretching and water exercises.');
+    if (conditions.includes('bp')) warnings.push('💊 HIGH BLOOD PRESSURE: Avoid heavy weightlifting and inverted positions. Focus on light cardio, walking and controlled breathing exercises.');
+    if (conditions.includes('asthma')) warnings.push('🫁 ASTHMA: Always carry your inhaler. Avoid exercising in cold, dry or dusty environments. Always warm up slowly before any cardio.');
+    if (conditions.includes('back')) warnings.push('🔙 BACK PAIN: Avoid deadlifts, heavy squats and crunches. Focus on core strengthening with gentle exercises and regular stretching.');
+    return warnings;
+}
 
 function show(section, el) {
     document.querySelectorAll('.section').forEach(function(s) { s.classList.remove('active'); });
@@ -305,26 +409,28 @@ function show(section, el) {
     el.classList.add('active');
 }
 
+function logoutUser() {
+    localStorage.removeItem('gym_user_email');
+    localStorage.removeItem('gym_user_name');
+    localStorage.removeItem('gym_user_data');
+    window.location.href = '/login';
+}
+
 function getLocation() {
     var status = document.getElementById('location-status');
-    status.textContent = 'Detecting location...';
-    status.style.color = '#ffcc00';
+    status.textContent = 'Detecting...'; status.style.color = '#ffcc00';
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
             function(pos) {
-                userLat = pos.coords.latitude;
-                userLon = pos.coords.longitude;
-                status.textContent = '✅ Location detected! (' + userLat.toFixed(4) + ', ' + userLon.toFixed(4) + ')';
+                userLat = pos.coords.latitude; userLon = pos.coords.longitude;
+                status.textContent = '✅ Detected! (' + userLat.toFixed(3) + ', ' + userLon.toFixed(3) + ')';
                 status.style.color = '#00ff88';
             },
-            function(err) {
-                status.textContent = '❌ Location denied. Allow location access and try again.';
+            function() {
+                status.textContent = '❌ Denied. Allow location and retry.';
                 status.style.color = '#e94560';
             }
         );
-    } else {
-        status.textContent = '❌ Geolocation not supported in this browser.';
-        status.style.color = '#e94560';
     }
 }
 
@@ -334,59 +440,60 @@ function getWorkout() {
     .then(function(res) { return res.json(); })
     .then(function(data) {
         var badges = data.exercises.map(function(e) { return '<span class="exercise-badge">' + e + '</span>'; }).join('');
-        document.getElementById('workout-result').innerHTML = '<div class="result-box"><p>✅ <strong>' + data.message + '</strong></p><p style="color:#aaa;margin-top:8px">💡 ' + data.tip + '</p><div style="margin-top:12px">' + badges + '</div></div>';
+        document.getElementById('workout-result').innerHTML = '<div class="result-box"><p>✅ <strong>' + data.message + '</strong></p><p style="color:#aaa;margin-top:6px">💡 ' + data.tip + '</p><div style="margin-top:10px">' + badges + '</div></div>';
+        // Save to history
+        if (userEmail) {
+            fetch('/save_workout', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: userEmail, exercise: 'General Workout', reps: 0, duration: 0, score: 0 }) });
+        }
         btn.textContent = "Load Today's Plan"; btn.disabled = false;
     }).catch(function() { btn.textContent = "Load Today's Plan"; btn.disabled = false; });
 }
 
 function getDiet() {
     var btn = event.target; btn.textContent = 'Generating...'; btn.disabled = true;
+    var w = +document.getElementById('weight').value;
+    var h = +document.getElementById('height').value;
+    var g = document.getElementById('goal').value;
+    var p = document.getElementById('preference').value;
     fetch('/diet', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            weight: +document.getElementById('weight').value,
-            height: +document.getElementById('height').value,
-            goal: document.getElementById('goal').value,
-            preference: document.getElementById('preference').value
-        })
+        body: JSON.stringify({ weight: w, height: h, goal: g, preference: p })
     })
     .then(function(res) { return res.json(); })
     .then(function(data) {
         var d = data.data;
         var bmiColor = d.category === 'Normal' ? '#00ff88' : d.category === 'Underweight' ? '#ffcc00' : '#e94560';
-        document.getElementById('diet-result').innerHTML = '<div class="result-box"><p>📊 BMI: <strong style="color:' + bmiColor + ';font-size:1.2rem">' + d.bmi + '</strong> — <span style="color:' + bmiColor + '">' + d.category + '</span></p><p>🔥 Calories: <strong style="color:#e94560">' + d.daily_calories + ' kcal</strong></p><p>🥗 ' + d.meal_plan + '</p><p>🎯 Goal: ' + d.goal + '</p></div>';
+        document.getElementById('diet-result').innerHTML = '<div class="result-box"><p>📊 BMI: <strong style="color:' + bmiColor + ';font-size:1.2rem">' + d.bmi + '</strong> — <span style="color:' + bmiColor + '">' + d.category + '</span></p><p>🔥 Calories: <strong style="color:#e94560">' + d.daily_calories + ' kcal</strong></p><p>🥗 ' + d.meal_plan + '</p><p>🎯 ' + d.goal + '</p></div>';
+        // Save diet log
+        if (userEmail) {
+            fetch('/save_diet', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: userEmail, weight: w, calories: d.daily_calories, meal_plan: d.meal_plan, goal: g }) });
+        }
         btn.textContent = 'Generate My Diet Plan'; btn.disabled = false;
     }).catch(function() { btn.textContent = 'Generate My Diet Plan'; btn.disabled = false; });
 }
 
 function getHabit() {
     var btn = event.target; btn.textContent = 'Analyzing...'; btn.disabled = true;
-    var log = document.getElementById('workout-log').value.split(',').map(function(d) { return d.trim(); }).filter(function(d) { return d; });
-    fetch('/habit', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ workout_log: log })
-    })
+    var log = document.getElementById('workout-log').value.split(',').map(function(d) { return d.trim(); }).filter(Boolean);
+    fetch('/habit', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ workout_log: log }) })
     .then(function(res) { return res.json(); })
     .then(function(data) {
         var riskClass = data.prediction.risk === 'Low' ? 'badge-low' : data.prediction.risk === 'Medium' ? 'badge-medium' : 'badge-high';
-        document.getElementById('habit-result').innerHTML = '<div class="result-box"><p>🔥 Streak: <strong style="color:#e94560;font-size:1.2rem">' + data.streak + ' days</strong></p><p>⚠️ Risk: <span class="' + riskClass + '">' + data.prediction.risk + '</span></p><p>💬 <span style="color:#ddd">' + data.prediction.message + '</span></p></div>';
+        document.getElementById('habit-result').innerHTML = '<div class="result-box"><p>🔥 Streak: <strong style="color:#e94560;font-size:1.2rem">' + data.streak + ' days</strong></p><p>⚠️ Risk: <span class="' + riskClass + '">' + data.prediction.risk + '</span></p><p>💬 ' + data.prediction.message + '</p></div>';
         btn.textContent = 'Analyze My Habit'; btn.disabled = false;
     }).catch(function() { btn.textContent = 'Analyze My Habit'; btn.disabled = false; });
 }
 
 function getBehavior() {
     var btn = event.target; btn.textContent = 'Analyzing...'; btn.disabled = true;
-    var log = document.getElementById('behavior-log').value.split(',').map(function(d) { return d.trim(); }).filter(function(d) { return d; });
-    fetch('/behavior', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ workout_log: log })
-    })
+    var log = document.getElementById('behavior-log').value.split(',').map(function(d) { return d.trim(); }).filter(Boolean);
+    fetch('/behavior', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ workout_log: log }) })
     .then(function(res) { return res.json(); })
     .then(function(data) {
         var d = data.data;
         var skipColor = d.skip_probability === 'Low' ? '#00ff88' : d.skip_probability === 'Medium' ? '#ffcc00' : '#e94560';
         var consColor = d.consistency_score === 'Very High' || d.consistency_score === 'High' ? '#00ff88' : d.consistency_score === 'Medium' ? '#ffcc00' : '#e94560';
-        document.getElementById('behavior-result').innerHTML = '<div class="result-box"><p>🏋️ Total Workouts: <strong style="color:#e94560;font-size:1.2rem">' + d.total_workouts + '</strong></p><p>📈 Pattern: <strong>' + d.pattern + '</strong></p><p>💪 Consistency: <strong style="color:' + consColor + '">' + d.consistency_score + '</strong></p><p>📅 Avg Gap: <strong>' + d.avg_gap_days + ' days</strong></p><p>⚠️ Skip Probability: <strong style="color:' + skipColor + '">' + d.skip_probability + '</strong></p><p>🤖 ' + d.prediction + '</p><p style="margin-top:12px;background:#e9456022;padding:12px;border-radius:8px;border-left:3px solid #e94560">💬 ' + d.behavioral_nudge + '</p></div>';
+        document.getElementById('behavior-result').innerHTML = '<div class="result-box"><p>🏋️ Total: <strong style="color:#e94560">' + d.total_workouts + ' workouts</strong></p><p>📈 Pattern: <strong>' + d.pattern + '</strong></p><p>💪 Consistency: <strong style="color:' + consColor + '">' + d.consistency_score + '</strong></p><p>📅 Avg Gap: ' + d.avg_gap_days + ' days</p><p>⚠️ Skip Probability: <strong style="color:' + skipColor + '">' + d.skip_probability + '</strong></p><p style="margin-top:12px;background:#e9456022;padding:10px;border-radius:8px;border-left:3px solid #e94560">💬 ' + d.behavioral_nudge + '</p></div>';
         btn.textContent = 'Analyze My Behavior'; btn.disabled = false;
     }).catch(function() { btn.textContent = 'Analyze My Behavior'; btn.disabled = false; });
 }
@@ -401,10 +508,7 @@ function sendChat() {
     chatHistory.push({ role: "user", content: msg });
     box.innerHTML += '<div id="typing" class="msg-bot"><span><span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span></span></div>';
     box.scrollTop = box.scrollHeight;
-    fetch('/chat', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: msg, history: chatHistory.slice(-10) })
-    })
+    fetch('/chat', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message: msg, history: chatHistory.slice(-10) }) })
     .then(function(res) { return res.json(); })
     .then(function(data) {
         var t = document.getElementById('typing'); if (t) t.remove();
@@ -413,7 +517,7 @@ function sendChat() {
         box.scrollTop = box.scrollHeight;
     }).catch(function() {
         var t = document.getElementById('typing'); if (t) t.remove();
-        box.innerHTML += '<div class="msg-bot"><span style="color:#e94560">❌ Error! Try again.</span></div>';
+        box.innerHTML += '<div class="msg-bot"><span style="color:#e94560">❌ Error!</span></div>';
     });
 }
 
@@ -426,92 +530,52 @@ function getAnalytics() {
         document.getElementById('total-users').textContent = d.total_users;
         document.getElementById('active-today').textContent = d.active_today;
         document.getElementById('avg-streak').textContent = d.avg_streak;
-        document.getElementById('top-exercise').textContent = d.top_exercise;
+        document.getElementById('heart-patients').textContent = d.heart_patients;
         if (chartInstance) chartInstance.destroy();
-        chartInstance = new Chart(document.getElementById('weeklyChart'), {
-            type: 'bar',
-            data: { labels: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'], datasets: [{ label: 'Workouts', data: d.weekly_workouts, backgroundColor: '#e94560cc', borderColor: '#e94560', borderWidth: 1, borderRadius: 8 }] },
-            options: { plugins: { legend: { labels: { color: 'white' }}}, scales: { x: { ticks: { color: '#aaa' }, grid: { color: '#ffffff0d' }}, y: { ticks: { color: '#aaa' }, grid: { color: '#ffffff0d' }}}}
-        });
+        chartInstance = new Chart(document.getElementById('weeklyChart'), { type: 'bar', data: { labels: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'], datasets: [{ label: 'Workouts', data: d.weekly_workouts, backgroundColor: '#e94560cc', borderColor: '#e94560', borderWidth: 1, borderRadius: 8 }] }, options: { plugins: { legend: { labels: { color: 'white' }}}, scales: { x: { ticks: { color: '#aaa' }, grid: { color: '#ffffff0d' }}, y: { ticks: { color: '#aaa' }, grid: { color: '#ffffff0d' }}}}});
         if (moduleChartInstance) moduleChartInstance.destroy();
-        moduleChartInstance = new Chart(document.getElementById('moduleChart'), {
-            type: 'bar',
-            data: { labels: Object.keys(d.module_usage), datasets: [{ label: 'Users', data: Object.values(d.module_usage), backgroundColor: '#534AB7cc', borderColor: '#534AB7', borderWidth: 1, borderRadius: 4 }] },
-            options: { indexAxis: 'y', plugins: { legend: { labels: { color: 'white' }}}, scales: { x: { ticks: { color: '#aaa' }, grid: { color: '#ffffff0d' }}, y: { ticks: { color: '#aaa' }, grid: { color: '#ffffff0d' }}}}
-        });
+        moduleChartInstance = new Chart(document.getElementById('moduleChart'), { type: 'bar', data: { labels: Object.keys(d.module_usage), datasets: [{ label: 'Users', data: Object.values(d.module_usage), backgroundColor: '#534AB7cc', borderRadius: 4 }] }, options: { indexAxis: 'y', plugins: { legend: { labels: { color: 'white' }}}, scales: { x: { ticks: { color: '#aaa' }, grid: { color: '#ffffff0d' }}, y: { ticks: { color: '#aaa' }, grid: { color: '#ffffff0d' }}}}});
         if (bmiChartInstance) bmiChartInstance.destroy();
-        bmiChartInstance = new Chart(document.getElementById('bmiChart'), {
-            type: 'doughnut',
-            data: { labels: Object.keys(d.bmi_distribution), datasets: [{ data: Object.values(d.bmi_distribution), backgroundColor: ['#ffcc00','#00ff88','#e94560','#ff6b35'], borderWidth: 0 }] },
-            options: { plugins: { legend: { labels: { color: 'white' }}}}
-        });
+        bmiChartInstance = new Chart(document.getElementById('bmiChart'), { type: 'doughnut', data: { labels: Object.keys(d.bmi_distribution), datasets: [{ data: Object.values(d.bmi_distribution), backgroundColor: ['#ffcc00','#00ff88','#e94560','#ff6b35'], borderWidth: 0 }] }, options: { plugins: { legend: { labels: { color: 'white' }}}}});
         if (skipChartInstance) skipChartInstance.destroy();
-        skipChartInstance = new Chart(document.getElementById('skipChart'), {
-            type: 'pie',
-            data: { labels: ['Low Risk','Medium Risk','High Risk'], datasets: [{ data: Object.values(d.skip_risk_today), backgroundColor: ['#00ff88','#ffcc00','#e94560'], borderWidth: 0 }] },
-            options: { plugins: { legend: { labels: { color: 'white' }}}}
-        });
+        skipChartInstance = new Chart(document.getElementById('skipChart'), { type: 'pie', data: { labels: ['Low','Medium','High'], datasets: [{ data: Object.values(d.skip_risk_today), backgroundColor: ['#00ff88','#ffcc00','#e94560'], borderWidth: 0 }] }, options: { plugins: { legend: { labels: { color: 'white' }}}}});
         btn.textContent = 'Load Analytics'; btn.disabled = false;
     }).catch(function() { btn.textContent = 'Load Analytics'; btn.disabled = false; });
 }
 
 function getPerformance() {
     var btn = event.target; btn.textContent = 'Analyzing...'; btn.disabled = true;
-    fetch('/performance', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            exercise: document.getElementById('perf-exercise').value,
-            reps: +document.getElementById('perf-reps').value,
-            duration: +document.getElementById('perf-duration').value
-        })
-    })
+    var exercise = document.getElementById('perf-exercise').value;
+    var reps = +document.getElementById('perf-reps').value;
+    var duration = +document.getElementById('perf-duration').value;
+    fetch('/performance', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ exercise, reps, duration }) })
     .then(function(res) { return res.json(); })
     .then(function(data) {
         var d = data.data;
         var scoreColor = d.performance_score >= 80 ? '#00ff88' : d.performance_score >= 60 ? '#ffcc00' : '#e94560';
-        var bars = Object.entries(d.weekly_report).map(function(e) {
-            return '<div style="display:inline-block;margin:4px;text-align:center"><div style="background:#e94560;width:30px;height:' + e[1] + 'px;border-radius:4px 4px 0 0;margin:0 auto"></div><div style="color:#aaa;font-size:11px">' + e[0] + '</div></div>';
-        }).join('');
-        document.getElementById('performance-result').innerHTML = '<div class="result-box"><p>🏋️ Exercise: <strong>' + d.exercise + '</strong></p><p>🎯 Score: <strong style="color:' + scoreColor + ';font-size:1.5rem">' + d.performance_score + '/100</strong></p><p>🏆 Grade: <strong style="color:' + scoreColor + '">' + d.grade + '</strong></p><p style="margin-top:12px">📊 Weekly:</p><div style="display:flex;align-items:flex-end;margin-top:8px">' + bars + '</div></div>';
+        var bars = Object.entries(d.weekly_report).map(function(e) { return '<div style="display:inline-block;margin:3px;text-align:center"><div style="background:#e94560;width:28px;height:' + e[1] + 'px;border-radius:4px 4px 0 0;margin:0 auto"></div><div style="color:#aaa;font-size:11px">' + e[0] + '</div></div>'; }).join('');
+        document.getElementById('performance-result').innerHTML = '<div class="result-box"><p>🏋️ Exercise: <strong>' + d.exercise + '</strong></p><p>🎯 Score: <strong style="color:' + scoreColor + ';font-size:1.5rem">' + d.performance_score + '/100</strong></p><p>🏆 ' + d.grade + '</p><div style="display:flex;align-items:flex-end;margin-top:10px">' + bars + '</div></div>';
+        if (userEmail) { fetch('/save_workout', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: userEmail, exercise, reps, duration, score: d.performance_score }) }); }
         btn.textContent = 'Analyze Performance'; btn.disabled = false;
     }).catch(function() { btn.textContent = 'Analyze Performance'; btn.disabled = false; });
 }
 
 function getRecommend() {
     var btn = event.target; btn.textContent = 'Loading...'; btn.disabled = true;
-    fetch('/recommend', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            goal: document.getElementById('rec-goal').value,
-            level: document.getElementById('rec-level').value,
-            days: +document.getElementById('rec-days').value,
-            lat: userLat,
-            lon: userLon
-        })
-    })
+    fetch('/recommend', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ goal: document.getElementById('rec-goal').value, level: document.getElementById('rec-level').value, days: +document.getElementById('rec-days').value, lat: userLat, lon: userLon }) })
     .then(function(res) { return res.json(); })
     .then(function(data) {
         var d = data.data;
         var exercises = d.recommended_exercises.map(function(e) { return '<span class="exercise-badge">' + e + '</span>'; }).join('');
-        var gyms = d.nearby_gyms.map(function(g) {
-            var link = g.maps_url !== '#' ? '<a href="' + g.maps_url + '" target="_blank">📍 Open in Maps</a>' : '';
-            return '<div class="gym-card"><div><p style="margin:0;font-weight:600">' + g.name + '</p><p style="margin:0;color:#aaa;font-size:13px">' + g.distance + '</p></div>' + link + '</div>';
-        }).join('');
-        document.getElementById('recommend-result').innerHTML = '<div class="result-box"><p>🎯 Goal: <strong>' + d.goal + '</strong> | Level: <strong>' + d.level + '</strong></p><div style="margin:8px 0">' + exercises + '</div><p style="margin-top:12px">🏋️ Nearby Gyms:</p>' + gyms + '<p style="margin-top:8px;color:#e94560">🔥 ' + d.challenge + '</p></div>';
-        btn.textContent = 'Get My Plan + Nearby Gyms'; btn.disabled = false;
-    }).catch(function() { btn.textContent = 'Get My Plan + Nearby Gyms'; btn.disabled = false; });
+        var gyms = d.nearby_gyms.map(function(g) { return '<div class="gym-card"><div><p style="margin:0;font-weight:600;font-size:14px">' + g.name + '</p><p style="margin:0;color:#aaa;font-size:12px">' + g.distance + '</p></div>' + (g.maps_url !== '#' ? '<a href="' + g.maps_url + '" target="_blank">📍 Maps</a>' : '') + '</div>'; }).join('');
+        document.getElementById('recommend-result').innerHTML = '<div class="result-box"><p>🎯 <strong>' + d.goal + '</strong> | <strong>' + d.level + '</strong></p><div style="margin:8px 0">' + exercises + '</div><p style="margin-top:12px">🏋️ Nearby Gyms:</p>' + gyms + '<p style="margin-top:8px;color:#e94560">🔥 ' + d.challenge + '</p></div>';
+        btn.textContent = 'Get Plan + Find Nearby Gyms'; btn.disabled = false;
+    }).catch(function() { btn.textContent = 'Get Plan + Find Nearby Gyms'; btn.disabled = false; });
 }
 
 function getIoT() {
     var btn = event.target; btn.textContent = 'Analyzing...'; btn.disabled = true;
-    fetch('/iot', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            heart_rate: +document.getElementById('iot-hr').value,
-            reps: +document.getElementById('iot-reps').value,
-            fatigue: document.getElementById('iot-fatigue').value
-        })
-    })
+    fetch('/iot', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ heart_rate: +document.getElementById('iot-hr').value, reps: +document.getElementById('iot-reps').value, fatigue: document.getElementById('iot-fatigue').value }) })
     .then(function(res) { return res.json(); })
     .then(function(data) {
         var d = data.data;
@@ -519,6 +583,22 @@ function getIoT() {
         document.getElementById('iot-result').innerHTML = '<div class="result-box"><p>❤️ Heart Rate: <strong style="color:' + hrColor + '">' + d.heart_rate + ' BPM</strong></p><p>⚡ Intensity: <strong>' + d.intensity_level + '</strong></p><p>🔧 ' + d.resistance_adjustment + '</p><p>⏱️ ' + d.rest_recommendation + '</p><p>🤖 <strong style="color:#e94560">' + d.ai_recommendation + '</strong></p><p>🔥 Calories: <strong>' + d.calories_burned + ' kcal</strong></p></div>';
         btn.textContent = 'Get AI Recommendation'; btn.disabled = false;
     }).catch(function() { btn.textContent = 'Get AI Recommendation'; btn.disabled = false; });
+}
+
+function loadHistory() {
+    if (!userEmail) return;
+    fetch('/get_workout_history?email=' + userEmail)
+    .then(function(res) { return res.json(); })
+    .then(function(data) {
+        if (data.history.length === 0) {
+            document.getElementById('history-result').innerHTML = '<p style="color:#aaa">No workout history yet! Start working out to see your history here.</p>';
+            return;
+        }
+        var html = data.history.map(function(h) {
+            return '<div class="history-item"><strong>' + h.workout_date + '</strong> — ' + h.exercise + ' | Reps: ' + h.reps + ' | Score: ' + h.performance_score + '</div>';
+        }).join('');
+        document.getElementById('history-result').innerHTML = html;
+    });
 }
 </script>
 </body>

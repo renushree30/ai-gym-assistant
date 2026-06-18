@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - AI Gym Assistant</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #0f0f0f; color: white; font-family: 'Segoe UI', sans-serif; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+        .auth-box { background: #1a1a2e; border: 1px solid #ffffff11; border-radius: 20px; padding: 40px; width: 100%; max-width: 500px; }
+        .tab-btn { background: none; border: none; color: #aaa; padding: 10px 24px; border-radius: 8px; cursor: pointer; font-size: 15px; transition: all 0.2s; }
+        .tab-btn.active { background: #e94560; color: white; }
+        .form-section { display: none; }
+        .form-section.active { display: block; }
+        .field { margin-bottom: 14px; }
+        .field label { color: #aaa; font-size: 13px; display: block; margin-bottom: 4px; }
+        .field input, .field select { background: #0f0f0f; color: white; border: 1px solid #ffffff22; border-radius: 8px; padding: 12px; width: 100%; font-size: 14px; outline: none; }
+        .field input:focus, .field select:focus { border-color: #e94560; }
+        .field input::placeholder { color: #555; }
+        select option { background: #0f0f0f; }
+        .btn-red { background: #e94560; border: none; color: white; border-radius: 8px; padding: 14px; width: 100%; font-size: 16px; cursor: pointer; margin-top: 8px; transition: all 0.2s; }
+        .btn-red:hover { background: #c73652; }
+        .health-check { display: flex; align-items: center; gap: 10px; margin: 6px 0; padding: 10px 14px; background: #0f0f0f; border-radius: 8px; border: 1px solid #ffffff11; cursor: pointer; transition: all 0.2s; }
+        .health-check:hover { border-color: #e94560; }
+        .health-check input[type="checkbox"] { width: 18px; height: 18px; cursor: pointer; accent-color: #e94560; flex-shrink: 0; }
+        .health-check label { color: #ddd; font-size: 13px; cursor: pointer; margin: 0; }
+        .alert-box { padding: 12px; border-radius: 8px; margin-bottom: 12px; font-size: 14px; display: none; }
+        .alert-success { background: #00ff8822; border: 1px solid #00ff88; color: #00ff88; }
+        .alert-error { background: #e9456022; border: 1px solid #e94560; color: #e94560; }
+        .section-title { color: #e94560; font-size: 14px; font-weight: 600; margin: 16px 0 8px; }
+        .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    </style>
+</head>
+<body>
+<div class="auth-box">
+    <h2 class="text-center mb-2" style="color:#e94560">🏋️ AI Gym Assistant</h2>
+    <p class="text-center mb-4" style="color:#aaa;font-size:14px">Your personal AI fitness companion</p>
+
+    <div class="text-center mb-4">
+        <button class="tab-btn active" onclick="switchTab('login', this)">Login</button>
+        <button class="tab-btn" onclick="switchTab('register', this)">Register</button>
+    </div>
+
+    <!-- LOGIN -->
+    <div id="login" class="form-section active">
+        <div id="login-alert" class="alert-box"></div>
+        <div class="field">
+            <label>Email Address</label>
+            <input type="email" id="login-email" placeholder="Enter your email">
+        </div>
+        <div class="field">
+            <label>Password</label>
+            <input type="password" id="login-password" placeholder="Enter your password" onkeypress="if(event.key==='Enter') loginUser()">
+        </div>
+        <button class="btn-red" onclick="loginUser()">🚀 Login to Dashboard</button>
+        <p style="text-align:center;margin-top:16px;color:#aaa;font-size:13px">
+            New here? <a href="#" onclick="switchTabByName('register')" style="color:#e94560">Create an account</a>
+        </p>
+    </div>
+
+    <!-- REGISTER -->
+    <div id="register" class="form-section">
+        <div id="register-alert" class="alert-box"></div>
+
+        <p class="section-title">👤 Personal Information</p>
+        <div class="field">
+            <label>Full Name</label>
+            <input type="text" id="reg-name" placeholder="Enter your full name">
+        </div>
+        <div class="field">
+            <label>Email Address</label>
+            <input type="email" id="reg-email" placeholder="Enter your email">
+        </div>
+        <div class="field">
+            <label>Password (min 6 characters)</label>
+            <input type="password" id="reg-password" placeholder="Create a strong password">
+        </div>
+        <div class="row-2">
+            <div class="field">
+                <label>Age</label>
+                <input type="number" id="reg-age" placeholder="Your age" min="10" max="100">
+            </div>
+            <div class="field">
+                <label>Gender</label>
+                <select id="reg-gender">
+                    <option value="">Select</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+        </div>
+
+        <p class="section-title">💪 Fitness Profile</p>
+        <div class="row-2">
+            <div class="field">
+                <label>Weight (kg)</label>
+                <input type="number" id="reg-weight" placeholder="e.g. 65">
+            </div>
+            <div class="field">
+                <label>Height (cm)</label>
+                <input type="number" id="reg-height" placeholder="e.g. 165">
+            </div>
+        </div>
+        <div class="row-2">
+            <div class="field">
+                <label>Fitness Goal</label>
+                <select id="reg-goal">
+                    <option value="weight loss">Weight Loss</option>
+                    <option value="muscle gain">Muscle Gain</option>
+                    <option value="maintain">Maintain Fitness</option>
+                </select>
+            </div>
+            <div class="field">
+                <label>Diet Preference</label>
+                <select id="reg-diet">
+                    <option value="vegetarian">Vegetarian</option>
+                    <option value="non-vegetarian">Non-Vegetarian</option>
+                    <option value="vegan">Vegan</option>
+                </select>
+            </div>
+        </div>
+
+        <p class="section-title">⚕️ Health Conditions</p>
+        <p style="color:#aaa;font-size:12px;margin-bottom:10px">This helps us recommend safe workouts tailored for you</p>
+
+        <div class="health-check">
+            <input type="checkbox" id="heart" value="heart">
+            <label for="heart">❤️ Heart Patient / Cardiovascular Disease</label>
+        </div>
+        <div class="health-check">
+            <input type="checkbox" id="diabetes" value="diabetes">
+            <label for="diabetes">🩸 Diabetes / High Blood Sugar</label>
+        </div>
+        <div class="health-check">
+            <input type="checkbox" id="joint" value="joint">
+            <label for="joint">🦴 Joint Pain / Arthritis</label>
+        </div>
+        <div class="health-check">
+            <input type="checkbox" id="bp" value="bp">
+            <label for="bp">💊 High Blood Pressure</label>
+        </div>
+        <div class="health-check">
+            <input type="checkbox" id="asthma" value="asthma">
+            <label for="asthma">🫁 Asthma / Breathing Issues</label>
+        </div>
+        <div class="health-check">
+            <input type="checkbox" id="back" value="back">
+            <label for="back">🔙 Back Pain / Spine Issues</label>
+        </div>
+        <div class="health-check">
+            <input type="checkbox" id="none" value="none">
+            <label for="none">✅ None — I am perfectly healthy!</label>
+        </div>
+
+        <button class="btn-red mt-3" onclick="registerUser()">✅ Create My Account</button>
+        <p style="text-align:center;margin-top:16px;color:#aaa;font-size:13px">
+            Already have an account? <a href="#" onclick="switchTabByName('login')" style="color:#e94560">Login here</a>
+        </p>
+    </div>
+</div>
+
+<script>
+function switchTab(tab, el) {
+    document.querySelectorAll('.form-section').forEach(function(s) { s.classList.remove('active'); });
+    document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+    document.getElementById(tab).classList.add('active');
+    el.classList.add('active');
+}
+
+function switchTabByName(tab) {
+    var btns = document.querySelectorAll('.tab-btn');
+    var idx = tab === 'login' ? 0 : 1;
+    switchTab(tab, btns[idx]);
+}
+
+function showAlert(id, msg, type) {
+    var el = document.getElementById(id);
+    el.textContent = msg;
+    el.className = 'alert-box ' + (type === 'success' ? 'alert-success' : 'alert-error');
+    el.style.display = 'block';
+}
+
+function registerUser() {
+    var name = document.getElementById('reg-name').value.trim();
+    var email = document.getElementById('reg-email').value.trim();
+    var password = document.getElementById('reg-password').value;
+    var age = document.getElementById('reg-age').value;
+    var gender = document.getElementById('reg-gender').value;
+    var weight = document.getElementById('reg-weight').value;
+    var height = document.getElementById('reg-height').value;
+    var goal = document.getElementById('reg-goal').value;
+    var diet = document.getElementById('reg-diet').value;
+
+    if (!name || !email || !password || !age || !gender || !weight || !height) {
+        showAlert('register-alert', '❌ Please fill all fields!', 'error'); return;
+    }
+    if (password.length < 6) {
+        showAlert('register-alert', '❌ Password must be at least 6 characters!', 'error'); return;
+    }
+
+    var conditions = [];
+    ['heart','diabetes','joint','bp','asthma','back','none'].forEach(function(id) {
+        if (document.getElementById(id).checked) conditions.push(id);
+    });
+
+    showAlert('register-alert', '⏳ Creating your account...', 'success');
+
+    fetch('/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, password, age, gender, weight, height, goal, diet, health_conditions: conditions })
+    })
+    .then(function(res) { return res.json(); })
+    .then(function(data) {
+        if (data.status === 'success') {
+            localStorage.setItem('gym_user_email', email);
+            localStorage.setItem('gym_user_name', name);
+            showAlert('register-alert', '✅ Account created! Redirecting to dashboard...', 'success');
+            setTimeout(function() { window.location.href = '/dashboard'; }, 1500);
+        } else {
+            showAlert('register-alert', '❌ ' + data.message, 'error');
+        }
+    })
+    .catch(function() {
+        showAlert('register-alert', '❌ Server error. Try again!', 'error');
+    });
+}
+
+function loginUser() {
+    var email = document.getElementById('login-email').value.trim();
+    var password = document.getElementById('login-password').value;
+
+    if (!email || !password) {
+        showAlert('login-alert', '❌ Please enter email and password!', 'error'); return;
+    }
+
+    showAlert('login-alert', '⏳ Logging in...', 'success');
+
+    fetch('/login_user', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+    })
+    .then(function(res) { return res.json(); })
+    .then(function(data) {
+        if (data.status === 'success') {
+            localStorage.setItem('gym_user_email', data.user.email);
+            localStorage.setItem('gym_user_name', data.user.name);
+            localStorage.setItem('gym_user_data', JSON.stringify(data.user));
+            showAlert('login-alert', '✅ Login successful! Redirecting...', 'success');
+            setTimeout(function() { window.location.href = '/dashboard'; }, 1000);
+        } else {
+            showAlert('login-alert', '❌ ' + data.message, 'error');
+        }
+    })
+    .catch(function() {
+        showAlert('login-alert', '❌ Server error. Try again!', 'error');
+    });
+}
+
+// Already logged in? Go to dashboard
+if (localStorage.getItem('gym_user_email')) {
+    window.location.href = '/dashboard';
+}
+</script>
+</body>
+</html>
